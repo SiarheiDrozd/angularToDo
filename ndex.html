@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>angular app</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body ng-app="ToDoApp">
+
+<main>
+    <div ng-controller="columns">
+        <ul class="columns">
+            <li ng-repeat="column in columns">
+                <h2>{{column}}</h2>
+                <div ng-controller="tasks">
+                    <div ng-repeat="task in data | taskFilter:$index" class="task">
+                        <span>{{task.name}}</span>
+                        <span>{{task.description}}</span>
+                        <button ng-click="moveLeft()">left</button>
+                        <button ng-click="moveRight()">right</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+</main>
+</body>
+</html>
