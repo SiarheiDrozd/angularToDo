@@ -1,0 +1,16 @@
+{
+  "name": "angular_todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http": "0.0.0",
+    "node-static": "^0.7.9",
+    "require": "^2.4.20"
+  }
+}

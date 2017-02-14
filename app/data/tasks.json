@@ -1,36 +1,43 @@
 [
   {
+    "id": 0,
     "name": "task1",
     "description": "do something",
     "stage": 0
   },
   {
-  "name": "task2",
+    "id": 1,
+  "name": "task",
   "description": "do something",
   "stage": 2
 },
   {
-  "name": "task3",
+    "id": 2,
+  "name": "task",
   "description": "do something",
   "stage": 0
 },
   {
-  "name": "task14",
+    "id": 3,
+  "name": "task",
   "description": "do something",
   "stage": 3
 },
   {
-  "name": "task35",
+    "id": 4,
+  "name": "task",
   "description": "do something",
   "stage": 1
 },
   {
-  "name": "task56",
+    "id": 5,
+  "name": "task",
   "description": "do something",
   "stage": 0
 },
   {
-  "name": "task12",
+    "id": 6,
+  "name": "task",
   "description": "do something",
   "stage": 2
 }

@@ -1,7 +1,14 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+ul {
+    list-style: none;
+}
 .columns {
     list-style: none;
 }
-.columns li {
+.columns > li {
     display: inline-block;
     margin: 5px;
     background-color: #bfbfbf;
@@ -9,7 +16,6 @@
 }
 .task {
     width: 150px;
-    /*height: 50px;*/
     margin: 5px;
     background: #e5e5e5;
     border: 1px solid #000;
