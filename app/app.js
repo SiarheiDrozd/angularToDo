@@ -22,7 +22,7 @@ var app = angular.module("ToDoApp", []);
         }
     };
     Tasks.prototype.moveRight = function ( task ) {
-        if(task.stage > 0){
+        if(task.stage < this.columns.length - 1){
             task.stage++;
         }
     };
