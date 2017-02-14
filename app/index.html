@@ -20,8 +20,8 @@
                         <span>{{task.description}}</span>
                         <span>stage: {{task.stage}}</span>
                         <span>index: {{$index}}, CI:{{columnIndex}}</span>
-                        <button ng-click="col.moveLeft(task, col)">left</button>
-                        <button ng-click="col.moveRight(task, col)">right</button>
+                        <button ng-click="col.moveLeft(task)">left</button>
+                        <button ng-click="col.moveRight(task)">right</button>
                     </li>
                 </ul>
             </li>

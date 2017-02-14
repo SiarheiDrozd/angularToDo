@@ -16,9 +16,13 @@ var app = angular.module("ToDoApp", []);
         }.bind(this));
     }
 
-    Tasks.prototype.moveLeft = function ( task, obj ) {
-        task.stage > 0 && obj.data[task.id].stage--;
+    Tasks.prototype.moveLeft = function ( task ) {
+        if(task.stage > 0){
+            task.stage--;
+        }
     };
-    Tasks.prototype.moveRight = function ( task, obj ) {
-        task.stage > 0 && obj.data[task.id].stage++;
+    Tasks.prototype.moveRight = function ( task ) {
+        if(task.stage > 0){
+            task.stage++;
+        }
     };
