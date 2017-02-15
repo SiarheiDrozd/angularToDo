@@ -1,16 +1,11 @@
-<div ng-controller="columns">
-    <ul class="columns">
-        <li ng-repeat="column in columns track by $index">
-            <h2>{{column}}</h2>
-            <div ng-controller="tasks">
-                <div ng-repeat="task in data track by $index" class="task">
-                    <span>{{task.name}}</span>
-                    <span>{{task.description}}</span>
-                    <span>{{task.stage}}</span>
-                    <button ng-click="moveLeft(task)">left</button>
-                    <button ng-click="moveRight(task)">right</button>
-                </div>
-            </div>
-        </li>
-    </ul>
-</div>
+<!-- columnIndex comes from above -->
+<ul>
+    <li ng-repeat="task in col.data | filter:{stage: columnIndex}" class="task"  data-drag="true" jqyoui-draggable>
+        <span>{{task.name + task.id}}</span>
+        <span>{{task.description}}</span>
+        <span>stage: {{task.stage}}</span>
+        <span>index: {{$index}}, CI:{{columnIndex}}</span>
+        <button ng-click="col.moveLeft(task)">left</button>
+        <button ng-click="col.moveRight(task)">right</button>
+    </li>
+</ul>

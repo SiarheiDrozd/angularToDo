@@ -3,32 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>angular app</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
-    <script type="text/javascript" src="app.js"></script>
     <link rel="stylesheet" href="style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="../node_modules/angular-dragdrop/src/angular-dragdrop.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script src="columns/columns_controller.js"></script>
 </head>
 <body ng-app="ToDoApp">
 
 <main>
+    <span >So you think you can drag</span>
     <div ng-controller="columns as col">
         <ul class="columns">
             <li ng-repeat="column in col.columns track by $index" ng-init="columnIndex = $index">
                 <h2>{{column}}</h2>
-                <ul>
-                    <li ng-repeat="task in col.data | filter:{stage: columnIndex}" class="task">
-                        <span>{{task.name + task.id}}</span>
-                        <span>{{task.description}}</span>
-                        <span>stage: {{task.stage}}</span>
-                        <span>index: {{$index}}, CI:{{columnIndex}}</span>
-                        <button ng-click="col.moveLeft(task)">left</button>
-                        <button ng-click="col.moveRight(task)">right</button>
-                    </li>
-                </ul>
+                <tasks></tasks>
             </li>
         </ul>
     </div>
-
-
 </main>
 </body>
 </html>

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "angular-dragdrop": "^1.0.13",
     "http": "0.0.0",
     "node-static": "^0.7.9",
     "require": "^2.4.20"
