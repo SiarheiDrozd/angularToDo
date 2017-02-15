@@ -7,38 +7,38 @@
   },
   {
     "id": 1,
-  "name": "task",
-  "description": "do something",
-  "stage": 2
-},
+    "name": "task2",
+    "description": "do something",
+    "stage": 2
+  },
   {
     "id": 2,
-  "name": "task",
-  "description": "do something",
-  "stage": 0
-},
+    "name": "task3",
+    "description": "do something",
+    "stage": 0
+  },
   {
     "id": 3,
-  "name": "task",
-  "description": "do something",
-  "stage": 3
-},
+    "name": "task4",
+    "description": "do something",
+    "stage": 3
+  },
   {
     "id": 4,
-  "name": "task",
-  "description": "do something",
-  "stage": 1
-},
+    "name": "task5",
+    "description": "do something",
+    "stage": 1
+  },
   {
     "id": 5,
-  "name": "task",
-  "description": "do something",
-  "stage": 0
-},
+    "name": "task6",
+    "description": "do something",
+    "stage": 0
+  },
   {
     "id": 6,
-  "name": "task",
-  "description": "do something",
-  "stage": 2
-}
+    "name": "task7",
+    "description": "do something",
+    "stage": 2
+  }
 ]

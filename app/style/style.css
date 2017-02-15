@@ -5,6 +5,11 @@
 ul {
     list-style: none;
 }
+.new-task-form {
+    width: 300px;
+    height: 200px;
+    background-color: antiquewhite;
+}
 .columns {
     list-style: none;
 }

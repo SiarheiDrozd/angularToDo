@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="ToDoApp">
 <head>
     <meta charset="UTF-8">
     <title>angular app</title>
@@ -11,15 +11,22 @@
     <script type="text/javascript" src="app.js"></script>
     <script src="columns/columns_controller.js"></script>
 </head>
-<body ng-app="ToDoApp">
-
+<body>
 <main>
-    <span >So you think you can drag</span>
+    <!--<form action="" class="new-task-form">-->
+        <!--<label for="taskName">Task Name: </label><input id="taskName" type="text" ng-model="task.name">{{}}-->
+        <!--<label for="taskDescription">Task Description: </label><input id="taskDescription" type="text" ng-model="task.description">-->
+        <!--<button>ADD</button>-->
+    <!--</form>-->
     <div ng-controller="columns as col">
         <ul class="columns">
-            <li ng-repeat="column in col.columns track by $index" ng-init="columnIndex = $index">
-                <h2>{{column}}</h2>
-                <tasks></tasks>
+            <li ng-repeat="column in col.columns track by $index"
+                ng-init="columnIndex = $index"
+                data-drop="true"
+                jqyoui-droppable
+                ng-model="col.columns">
+                    <h2>{{column.name}}</h2>
+                    <tasks></tasks>
             </li>
         </ul>
     </div>
