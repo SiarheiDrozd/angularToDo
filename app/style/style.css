@@ -7,8 +7,8 @@ ul {
 }
 .new-task-form {
     width: 300px;
-    height: 200px;
-    background-color: antiquewhite;
+    padding: 5px;
+    background-color: #bfb1ff;
 }
 .columns {
     list-style: none;

@@ -1,11 +1,12 @@
 <!-- columnIndex comes from above -->
 <ul>
+    <!--ng-repeat="task in col.columns[columnIndex].items"-->
     <li class="task"
-        jqyoui-draggable
-        ng-repeat="task in col.columns[columnIndex].items"
+        ng-repeat="task in col.data | filter:{stage: columnIndex}"
         data-drag="true"
         data-jqyoui-options="{revert: 'invalid'}"
-        jqyoui-draggable="{animate:true}">
+        ng-init="task = task"
+        jqyoui-draggable="{animate:true, onStart:'col.onStartDrag(task)'}">
             <span>{{task.name}}</span>
             <span>{{task.description}}</span>
             <!--<span>stage: {{task.stage}}</span>-->

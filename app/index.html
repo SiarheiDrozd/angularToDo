@@ -2,31 +2,33 @@
 <html lang="en" ng-app="ToDoApp">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>angular app</title>
     <link rel="stylesheet" href="style/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
-    <script src="../node_modules/angular-dragdrop/src/angular-dragdrop.js"></script>
+    <script src="script/angular-dragdrop.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
     <script src="columns/columns_controller.js"></script>
 </head>
 <body>
 <main>
-    <!--<form action="" class="new-task-form">-->
-        <!--<label for="taskName">Task Name: </label><input id="taskName" type="text" ng-model="task.name">{{}}-->
-        <!--<label for="taskDescription">Task Description: </label><input id="taskDescription" type="text" ng-model="task.description">-->
-        <!--<button>ADD</button>-->
-    <!--</form>-->
+
     <div ng-controller="columns as col">
+        <form class="new-task-form" ng-submit="col.addNewTask(newTask)">
+            <label for="taskName">Task Name: </label><input id="taskName" type="text" ng-model="newTask.name">
+            <label for="taskDescription">Task Description: </label><input id="taskDescription" type="text" ng-model="newTask.description">
+            <button>ADD</button>
+        </form>
         <ul class="columns">
             <li ng-repeat="column in col.columns track by $index"
                 ng-init="columnIndex = $index"
                 data-drop="true"
-                jqyoui-droppable
-                ng-model="col.columns">
+                jqyoui-droppable="{onDrop:'col.onDrop(columnIndex)'}">
                     <h2>{{column.name}}</h2>
                     <tasks></tasks>
+                <!--<div ng-if="newTask">asd</div>-->
             </li>
         </ul>
     </div>
