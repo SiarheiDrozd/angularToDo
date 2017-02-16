@@ -1,12 +1,3 @@
-app.controller("columns", ["$http", Columns]);
-
-app.directive("tasks", function () {
-    return {
-        restrict: "E",
-        templateUrl: "columns/columns_view.html"
-    }
-});
-
 function Columns( $http ) {
     this.columns = [
         {
