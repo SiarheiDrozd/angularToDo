@@ -1,8 +1,8 @@
 angular.module("ToDoApp", ["ngDragDrop"])
-    .controller("columns", ["$http", Columns])
+    .controller("columns", ["$http", "$scope", Columns])
     .directive("tasks", function () {
     return {
         restrict: "E",
-        templateUrl: "columns/columns_view.html"
+        templateUrl: "columns/task_view.html"
     }
 });
