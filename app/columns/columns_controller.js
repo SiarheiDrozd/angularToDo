@@ -7,8 +7,10 @@ function Columns( $http, $scope ) {
     ];
     this.data = [];
     this.movingTask = {};
+    this.initTask = {stage:0, id:-1, name: "", description: ""};
 
-    this.scope = $scope;
+    this.newTask = angular.copy(this.initTask);
+
     $http.get("data/tasks.json")
         .then(function ( result ) {
             this.data = result.data;
@@ -24,16 +26,15 @@ Columns.prototype.onDrop = function ( event, context, columnIndex ) {
 Columns.prototype.onStartDrag = function ( event, context, task ) {
     this.movingTask = task;
 };
-//
-// Columns.prototype.onStop = function () {
-//     this.scope.$digest();
-// };
 
-Columns.prototype.addNewTask = function ( task ) {
-    this.data.push(Object.assign({
-        stage: 0,
-        id: this.data.length
-    }, task));
+Columns.prototype.addNewTask = function () {
+    if(this.newTask.name && this.newTask.description){
+        this.data.push(Object.assign({
+                stage: 0,
+                id: this.data.length
+            }, this.newTask));
+        this.newTask = angular.copy(this.initTask);
+    }
 };
 
 Columns.prototype.moveLeft = function ( task ) {

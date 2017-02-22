@@ -15,19 +15,18 @@
 <body>
 <main>
     <div ng-controller="columns as col">
-        <form class="new-task-form" ng-submit="col.addNewTask(newTask)">
+        <form class="new-task-form" ng-submit="col.addNewTask()">
             <label for="taskName">Task Name: </label>
                 <input id="taskName"
                        type="text"
                        class="new-task-input"
-                       ng-model="newTask.name">
+                       ng-model="col.newTask.name">
 
             <label for="taskDescription">Task Description: </label>
                 <input id="taskDescription"
                        type="text"
                        class="new-task-input"
-                       ng-model="newTask.description">
-
+                       ng-model="col.newTask.description">
             <button class="button">ADD</button>
         </form>
         <ul class="columns">
@@ -37,12 +36,15 @@
                 jqyoui-droppable="{onDrop:'col.onDrop(columnIndex)'}">
                 <h2>{{column}}</h2>
                 <ul>
+                    <li class="task" ng-show="col.newTask.stage === columnIndex">
+                        <span>{{col.newTask.name}}</span>
+                        <span>{{col.newTask.description}}</span>
+                    </li>
                     <tasks ng-repeat="task in col.data | filter:{stage: columnIndex}"
                            data-drag="true"
                            data-jqyoui-options="{revert: 'invalid'}"
                            ng-init="task = task"
                            jqyoui-draggable="{animate:true, onStart:'col.onStartDrag(task)', onStop: 'col.onStop()'}">
-
                     </tasks>
                 </ul>
             </li>
