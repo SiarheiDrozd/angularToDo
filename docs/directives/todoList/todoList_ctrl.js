@@ -1,4 +1,4 @@
-function TodoListCtrl( $http, $scope ) {
+export default function TodoListCtrl( $http, $scope ) {
     this.columns = [
         "TODO",
         "WIP",
@@ -18,7 +18,6 @@ function TodoListCtrl( $http, $scope ) {
     ;
 }
 
-
 TodoListCtrl.prototype.addNewTask = function () {
     if(this.newTask.name && this.newTask.description){
         this.data.push(Object.assign({
@@ -34,6 +33,7 @@ TodoListCtrl.prototype.moveLeft = function ( task ) {
         task.stage--;
     }
 };
+
 TodoListCtrl.prototype.moveRight = function ( task ) {
     if (task.stage < this.columns.length - 1) {
         task.stage++;

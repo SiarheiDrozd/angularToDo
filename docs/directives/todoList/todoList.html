@@ -14,8 +14,10 @@
         <button class="button">ADD</button>
     </form>
     <ul class="columns">
-        <column ng-repeat="column in todoList.columns track by $index"
-                ng-init="columnIndex = $index">
-        </column>
+        <li class="column"
+            ng-repeat="column in todoList.columns track by $index"
+            ng-init="columnIndex = $index"
+            column>
+        </li>
     </ul>
 </div>

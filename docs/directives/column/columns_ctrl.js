@@ -18,3 +18,5 @@ Column.prototype.onStopDrag = function ( event, context, task ) {
     this.isDragging = false;
     console.log("stop", this.taskService.movingTask, this.isDragging);
 };
+
+export default Column;
