@@ -1,6 +1,7 @@
 angular.module("ToDoApp", ["ngDragDrop"])
+    .service("taskStateService", TaskStateService)
     .controller("todoListCtrl", ["$http", "$scope", TodoListCtrl])
-    .controller("column", Column)
+    .controller("column", ["taskStateService", Column])
     .directive("todoList", function () {
         return {
             restrict: "E",
@@ -12,7 +13,7 @@ angular.module("ToDoApp", ["ngDragDrop"])
     .directive("task", function () {
         return {
             restrict: "E",
-            templateUrl: "directives/task/task.html"
+            templateUrl: "directives/task/task.html",
         }
     })
     .directive("column", function () {
@@ -23,3 +24,6 @@ angular.module("ToDoApp", ["ngDragDrop"])
         controllerAs: "currentColumn"
     }
 });
+function TaskStateService(  ) {
+    this.movingTask = {};
+}

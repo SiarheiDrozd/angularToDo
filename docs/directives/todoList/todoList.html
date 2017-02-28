@@ -15,9 +15,7 @@
     </form>
     <ul class="columns">
         <column ng-repeat="column in todoList.columns track by $index"
-                ng-init="columnIndex = $index"
-                data-drop="true"
-                jqyoui-droppable="{onDrop:'currentColumn.onDrop(columnIndex)'}">
+                ng-init="columnIndex = $index">
         </column>
     </ul>
 </div>

@@ -18,11 +18,6 @@ function TodoListCtrl( $http, $scope ) {
     ;
 }
 
-TodoListCtrl.prototype.onStartDrag = function ( event, context, task ) {
-
-    this.movingTask = task;
-    console.log(this.movingTask);
-};
 
 TodoListCtrl.prototype.addNewTask = function () {
     if(this.newTask.name && this.newTask.description){

@@ -35,7 +35,12 @@ ul {
     border: 1px solid #8bc888;
     vertical-align: top;
 }
-
+.drop-area {
+    width: 100%;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 5px dashed rgba(0, 0, 0, 0.5);
+}
 h2 {
     font-size: 24px;
 }

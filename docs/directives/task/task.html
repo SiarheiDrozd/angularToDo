@@ -9,7 +9,7 @@
     </button>
     <button class="button float-right"
             ng-click="todoList.moveRight(task)"
-            ng-hide="{{task.stage == col.columns.length - 1}}">
+            ng-hide="{{task.stage == todoList.columns.length - 1}}">
         {{todoList.columns[task.stage + 1]}}
     </button>
 </li>
