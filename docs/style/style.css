@@ -24,7 +24,7 @@ ul {
     list-style: none;
 }
 
-.columns > li {
+.column {
     display: inline-block;
     font-size: 0;
     margin: 5px;

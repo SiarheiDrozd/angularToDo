@@ -1,0 +1,23 @@
+<div>
+    <form class="new-task-form" ng-submit="todoList.addNewTask()">
+        <label for="taskName">Task Name: </label>
+        <input id="taskName"
+               type="text"
+               class="new-task-input"
+               ng-model="todoList.newTask.name">
+
+        <label for="taskDescription">Task Description: </label>
+        <input id="taskDescription"
+               type="text"
+               class="new-task-input"
+               ng-model="todoList.newTask.description">
+        <button class="button">ADD</button>
+    </form>
+    <ul class="columns">
+        <column ng-repeat="column in todoList.columns track by $index"
+                ng-init="columnIndex = $index"
+                data-drop="true"
+                jqyoui-droppable="{onDrop:'currentColumn.onDrop(columnIndex)'}">
+        </column>
+    </ul>
+</div>
