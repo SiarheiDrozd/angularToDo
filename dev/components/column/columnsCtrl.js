@@ -1,4 +1,6 @@
-function Column(taskStateService) {
+require("./columns.css");
+
+function Column(taskStateService, ToDoListStorage) {
     this.taskService = taskStateService;
     this.isDragging = false;
 }

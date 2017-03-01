@@ -1,10 +1,17 @@
 import TodoListCtrl from "./components/todoList/todoListCtrl";
-import Column from "./components/column/columnsCtrl";
+import ColumnCtrl from "./components/column/columnsCtrl";
+import TaskCtrl from "./components/task/taskCtrl";
+import ToDoListStorage from "./components/todoList/toDoListStorageService";
+import TaskStateService from "./components/task/taskStateService";
+
+require("./components/task/task.css"); // find place
 
 var todoApp = angular.module("ToDoApp", ["ngDragDrop"])
     .service("taskStateService", TaskStateService)
-    .controller("todoListCtrl", ["$http", "$scope", TodoListCtrl])
-    .controller("column", ["taskStateService", Column])
+    .service("ToDoListStorage", ToDoListStorage)
+    .controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", TodoListCtrl])
+    .controller("column", ["taskStateService", "ToDoListStorage", ColumnCtrl])
+    .controller("taskCtrl", ["taskStateService", "ToDoListStorage", TaskCtrl])
     .directive("todoList", function () {
         return {
             restrict: "AE",
@@ -25,13 +32,9 @@ var todoApp = angular.module("ToDoApp", ["ngDragDrop"])
         return {
             restrict: "AE",
             template: require("./components/task/task.html"),
+            controller: "taskCtrl",
+            controllerAs: "task"
         }
     });
-
-
-
-function TaskStateService(  ) {
-    this.movingTask = {};
-}
 
 export default todoApp;

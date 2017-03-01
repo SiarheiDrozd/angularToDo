@@ -1,0 +1,14 @@
+<form class="new-task-form" ng-submit="todoList.addNewTask()">
+    <label for="taskName">Task Name: </label>
+    <input id="taskName"
+           type="text"
+           class="new-task-input"
+           ng-model="ToDoListStorage.newTask.name">
+
+    <label for="taskDescription">Task Description: </label>
+    <input id="taskDescription"
+           type="text"
+           class="new-task-input"
+           ng-model="ToDoListStorage.newTask.description">
+    <button class="button">ADD</button>
+</form>
