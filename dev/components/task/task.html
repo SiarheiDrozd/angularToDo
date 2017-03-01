@@ -1,4 +1,4 @@
-<li class="task clearfix">
+<div class="task clearfix">
     <span>{{task.name}}</span>
     <span>{{task.description}}</span>
     <span>move to:</span>
@@ -12,5 +12,5 @@
             ng-hide="{{task.stage == todoList.columns.length - 1}}">
         {{todoList.columns[task.stage + 1]}}
     </button>
-</li>
+</div>
 

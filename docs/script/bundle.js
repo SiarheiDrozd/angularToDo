@@ -63,59 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _todoList_ctrl = __webpack_require__(2);
-
-var _todoList_ctrl2 = _interopRequireDefault(_todoList_ctrl);
-
-var _columns_ctrl = __webpack_require__(1);
-
-var _columns_ctrl2 = _interopRequireDefault(_columns_ctrl);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var todoApp = angular.module("ToDoApp", ["ngDragDrop"]).service("taskStateService", TaskStateService).controller("todoListCtrl", ["$http", "$scope", _todoList_ctrl2.default]).controller("column", ["taskStateService", _columns_ctrl2.default]).directive("todoList", function () {
-    return {
-        restrict: "AE",
-        templateUrl: "directives/todoList/todoList.html",
-        controller: "todoListCtrl",
-        controllerAs: "todoList"
-    };
-}).directive("task", function () {
-    return {
-        restrict: "AE",
-        templateUrl: "directives/task/task.html"
-    };
-}).directive("column", function () {
-    return {
-        restrict: "AE",
-        templateUrl: "directives/column/column.html",
-        controller: "column",
-        controllerAs: "currentColumn"
-    };
-});
-
-function TaskStateService() {
-    this.movingTask = {};
-}
-
-exports.default = todoApp;
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -148,7 +100,7 @@ Column.prototype.onStopDrag = function (event, context, task) {
 exports.default = Column;
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -166,7 +118,7 @@ function TodoListCtrl($http, $scope) {
 
     this.newTask = angular.copy(this.initTask);
 
-    $http.get("data/tasks.json").then(function (result) {
+    $http.get("./data/tasks.json").then(function (result) {
         this.data = result.data;
     }.bind(this));
 }
@@ -194,17 +146,70 @@ TodoListCtrl.prototype.moveRight = function (task) {
 };
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <li class=\"drop-area\"\r\n            data-drop=\"true\"\r\n            jqyoui-droppable=\"{onDrop:'currentColumn.onDrop(columnIndex)'}\"\r\n            ng-show=\"currentColumn.isDragging\">\r\n        </li>\r\n        <li class=\"task\" ng-show=\"todoList.newTask.stage === columnIndex\">\r\n            <span>{{todoList.newTask.name}}</span>\r\n            <span>{{todoList.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"task in todoList.data | filter:{stage: columnIndex}\"\r\n            data-drag=\"true\"\r\n            data-jqyoui-options=\"{revert: 'invalid'}\"\r\n            ng-init=\"task = task\"\r\n            jqyoui-draggable=\"{animate:true, onStart:'currentColumn.onStartDrag(task)', onStop:'currentColumn.onStopDrag(task)'}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+
+/***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"task clearfix\">\r\n    <span>{{task.name}}</span>\r\n    <span>{{task.description}}</span>\r\n    <span>move to:</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"todoList.moveLeft(task)\"\r\n            ng-hide=\"{{task.stage == 0}}\">\r\n        {{todoList.columns[task.stage - 1]}}\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"todoList.moveRight(task)\"\r\n            ng-hide=\"{{task.stage == todoList.columns.length - 1}}\">\r\n        {{todoList.columns[task.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = "<div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>";
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _app = __webpack_require__(0);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _app2 = _interopRequireDefault(_app);
+var _todoListCtrl = __webpack_require__(1);
+
+var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
+
+var _columnsCtrl = __webpack_require__(0);
+
+var _columnsCtrl2 = _interopRequireDefault(_columnsCtrl);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var todoApp = angular.module("ToDoApp", ["ngDragDrop"]).service("taskStateService", TaskStateService).controller("todoListCtrl", ["$http", "$scope", _todoListCtrl2.default]).controller("column", ["taskStateService", _columnsCtrl2.default]).directive("todoList", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(4),
+        controller: "todoListCtrl",
+        controllerAs: "todoList"
+    };
+}).directive("column", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(2),
+        controller: "column",
+        controllerAs: "currentColumn"
+    };
+}).directive("task", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(3)
+    };
+});
+
+function TaskStateService() {
+    this.movingTask = {};
+}
+
+exports.default = todoApp;
 
 /***/ })
 /******/ ]);

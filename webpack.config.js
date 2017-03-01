@@ -1,9 +1,9 @@
 var path = require("path");
 
 module.exports = {
-    entry: "./entry.js",
+    entry: "./dev/entry.js",
     output: {
-        path: "./docs/",
+        path: "./docs/script/",
         filename: "bundle.js"
     },
     watch: true,
@@ -19,6 +19,11 @@ module.exports = {
                 query: {
                     presets: ['es2015']
                 }
+            },
+            {
+                test: /\.html$/,
+                exclude: /(node_modules|docs)/,
+                loader: 'html-loader'
             }
         ]
     }

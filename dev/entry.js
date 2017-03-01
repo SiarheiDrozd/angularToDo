@@ -1,5 +1,5 @@
-import TodoListCtrl from "./directives/todoList/todoListCtrl";
-import Column from "./directives/column/columnsCtrl";
+import TodoListCtrl from "./components/todoList/todoListCtrl";
+import Column from "./components/column/columnsCtrl";
 
 var todoApp = angular.module("ToDoApp", ["ngDragDrop"])
     .service("taskStateService", TaskStateService)
@@ -8,25 +8,26 @@ var todoApp = angular.module("ToDoApp", ["ngDragDrop"])
     .directive("todoList", function () {
         return {
             restrict: "AE",
-            templateUrl: require("./directives/todoList/todoList.html"),
+            template: require("./components/todoList/todoList.html"),
             controller: "todoListCtrl",
             controllerAs: "todoList"
+        }
+    })
+    .directive("column", function () {
+        return {
+            restrict: "AE",
+            template: require("./components/column/column.html"),
+            controller: "column",
+            controllerAs: "currentColumn"
         }
     })
     .directive("task", function () {
         return {
             restrict: "AE",
-            templateUrl: require("./directives/task/task.html"),
+            template: require("./components/task/task.html"),
         }
-    })
-    .directive("column", function () {
-    return {
-        restrict: "AE",
-        templateUrl: require("./directives/column/column.html"),
-        controller: "column",
-        controllerAs: "currentColumn"
-    }
-});
+    });
+
 
 
 function TaskStateService(  ) {

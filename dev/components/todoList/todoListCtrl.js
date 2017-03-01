@@ -11,7 +11,7 @@ export default function TodoListCtrl( $http, $scope ) {
 
     this.newTask = angular.copy(this.initTask);
 
-    $http.get("data/tasks.json")
+    $http.get("./data/tasks.json")
         .then(function ( result ) {
             this.data = result.data;
         }.bind(this))
