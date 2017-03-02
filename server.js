@@ -9,5 +9,5 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + "/docs/");
 });
 app.listen(3000, function () {
-    console.log("listening on 3000");
+    console.log("listening on http://127.0.0.1:3000");
 });
