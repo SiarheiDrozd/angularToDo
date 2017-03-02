@@ -9,47 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
     <script src="script/angular-dragdrop.min.js"></script>
-    <script src="columns/columns_controller.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script src="script/bundle.js"></script>
 </head>
 <body>
 <main>
-    <div ng-controller="columns as col">
-        <form class="new-task-form" ng-submit="col.addNewTask()">
-            <label for="taskName">Task Name: </label>
-                <input id="taskName"
-                       type="text"
-                       class="new-task-input"
-                       ng-model="col.newTask.name">
-
-            <label for="taskDescription">Task Description: </label>
-                <input id="taskDescription"
-                       type="text"
-                       class="new-task-input"
-                       ng-model="col.newTask.description">
-            <button class="button">ADD</button>
-        </form>
-        <ul class="columns">
-            <li ng-repeat="column in col.columns track by $index"
-                ng-init="columnIndex = $index"
-                data-drop="true"
-                jqyoui-droppable="{onDrop:'col.onDrop(columnIndex)'}">
-                <h2>{{column}}</h2>
-                <ul>
-                    <li class="task" ng-show="col.newTask.stage === columnIndex">
-                        <span>{{col.newTask.name}}</span>
-                        <span>{{col.newTask.description}}</span>
-                    </li>
-                    <tasks ng-repeat="task in col.data | filter:{stage: columnIndex}"
-                           data-drag="true"
-                           data-jqyoui-options="{revert: 'invalid'}"
-                           ng-init="task = task"
-                           jqyoui-draggable="{animate:true, onStart:'col.onStartDrag(task)', onStop: 'col.onStop()'}">
-                    </tasks>
-                </ul>
-            </li>
-        </ul>
-    </div>
+    <todo-list>
+    </todo-list>
 </main>
 </body>
 </html>

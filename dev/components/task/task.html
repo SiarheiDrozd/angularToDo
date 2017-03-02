@@ -1,0 +1,16 @@
+<div class="task clearfix">
+    <span>{{task.name}}</span>
+    <span>{{task.description}}</span>
+    <span>move to:</span>
+    <button class="button float-left"
+            ng-click="todoList.moveLeft(task)"
+            ng-hide="{{task.stage == 0}}">
+        {{todoList.columns[task.stage - 1]}}
+    </button>
+    <button class="button float-right"
+            ng-click="todoList.moveRight(task)"
+            ng-hide="{{task.stage == todoList.columns.length - 1}}">
+        {{todoList.columns[task.stage + 1]}}
+    </button>
+</div>
+
