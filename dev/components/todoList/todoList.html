@@ -1,4 +1,5 @@
-<div>
+<div ng-model="todoList.data" ng-change="">
+    {{todoList.data}}
     <form class="new-task-form" ng-submit="todoList.addNewTask()">
         <label for="taskName">Task Name: </label>
         <input id="taskName"

@@ -1,19 +1,13 @@
-export default function TodoListCtrl( $http, $scope ) {
-    this.columns = [
-        "TODO",
-        "WIP",
-        "TEST",
-        "DONE"
-    ];
-    this.data = [];
+export default function TodoListCtrl( $http, $scope, ToDoListStorage ) {
+    this.data = ToDoListStorage.data;
+    this.columns = ToDoListStorage.columns;
     this.movingTask = {};
     this.initTask = {stage:0, id:-1, name: "", description: ""};
-
     this.newTask = angular.copy(this.initTask);
 
     $http.get("./data/tasks.json")
         .then(function ( result ) {
-            this.data = result.data;
+            ToDoListStorage.data = result.data;
         }.bind(this))
     ;
 }

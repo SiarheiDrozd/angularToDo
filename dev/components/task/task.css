@@ -1,0 +1,18 @@
+.task {
+    font-size: 16px;
+    width: 150px;
+    margin: 5px 0;
+    background: #ffffff;
+    text-align: center;
+}
+
+.task span {
+    display: block;
+}
+
+.button {
+    border: 1px solid #eeeeee;
+    background: #ffffff;
+    height: 30px;
+    width: 50%;
+}
