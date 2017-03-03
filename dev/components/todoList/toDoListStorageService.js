@@ -6,6 +6,6 @@ function ToDoListStorage() {
         "DONE"
     ];
     this.data = [];
-    this.newTask = {};
+    this.newTask = {stage: 0};
 }
 export default ToDoListStorage;

@@ -1,21 +1,20 @@
-<div ng-model="todoList.data" ng-change="">
-    {{todoList.data}}
+<div>
     <form class="new-task-form" ng-submit="todoList.addNewTask()">
         <label for="taskName">Task Name: </label>
         <input id="taskName"
                type="text"
                class="new-task-input"
-               ng-model="todoList.newTask.name">
+               ng-model="todoList.storage.newTask.name">
 
         <label for="taskDescription">Task Description: </label>
         <input id="taskDescription"
                type="text"
                class="new-task-input"
-               ng-model="todoList.newTask.description">
+               ng-model="todoList.storage.newTask.description">
         <button class="button">ADD</button>
     </form>
     <ul class="columns">
-        <li ng-repeat="column in todoList.columns track by $index"
+        <li ng-repeat="column in todoList.storage.columns track by $index"
             ng-init="columnIndex = $index"
             column>
         </li>

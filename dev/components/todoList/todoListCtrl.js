@@ -1,6 +1,5 @@
 export default function TodoListCtrl( $http, $scope, ToDoListStorage ) {
-    this.data = ToDoListStorage.data;
-    this.columns = ToDoListStorage.columns;
+    this.storage = ToDoListStorage;
     this.movingTask = {};
     this.initTask = {stage:0, id:-1, name: "", description: ""};
     this.newTask = angular.copy(this.initTask);
@@ -13,12 +12,12 @@ export default function TodoListCtrl( $http, $scope, ToDoListStorage ) {
 }
 
 TodoListCtrl.prototype.addNewTask = function () {
-    if(this.newTask.name && this.newTask.description){
-        this.data.push(Object.assign({
+    if(this.storage.newTask.name && this.storage.newTask.description){
+        this.storage.data.push(Object.assign({
                 stage: 0,
-                id: this.data.length
-            }, this.newTask));
-        this.newTask = angular.copy(this.initTask);
+                id: this.storage.data.length
+            }, this.storage.newTask));
+        this.storage.newTask = angular.copy(this.initTask);
     }
 };
 
@@ -29,7 +28,7 @@ TodoListCtrl.prototype.moveLeft = function ( task ) {
 };
 
 TodoListCtrl.prototype.moveRight = function ( task ) {
-    if (task.stage < this.columns.length - 1) {
+    if (task.stage < this.storage.columns.length - 1) {
         task.stage++;
     }
 };

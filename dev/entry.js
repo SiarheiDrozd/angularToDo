@@ -1,17 +1,19 @@
 import TodoListCtrl from "./components/todoList/todoListCtrl";
-import ColumnCtrl from "./components/column/columnsCtrl";
+import ColumnCtrl from "./components/column/columnCtrl";
 import TaskCtrl from "./components/task/taskCtrl";
 import ToDoListStorage from "./components/todoList/toDoListStorageService";
 import TaskStateService from "./components/task/taskStateService";
 
 require("./components/task/task.css"); // find place
 
-var todoApp = angular.module("ToDoApp", ["ngDragDrop"])
+let todoApp = angular.module("ToDoApp", ["ngDragDrop"])
     .service("taskStateService", TaskStateService)
     .service("ToDoListStorage", ToDoListStorage)
+
     .controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", TodoListCtrl])
     .controller("column", ["taskStateService", "ToDoListStorage", ColumnCtrl])
     .controller("taskCtrl", ["taskStateService", "ToDoListStorage", TaskCtrl])
+
     .directive("todoList", function () {
         return {
             restrict: "AE",
