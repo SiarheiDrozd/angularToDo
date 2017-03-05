@@ -3,8 +3,8 @@ import ColumnCtrl from "./components/column/columnCtrl";
 import TaskCtrl from "./components/task/taskCtrl";
 import ToDoListStorage from "./components/todoList/toDoListStorageService";
 import TaskStateService from "./components/task/taskStateService";
+require("angular-drag-and-drop-lists");
 
-require("./components/task/task.css"); // find place
 
 let todoApp = angular.module("ToDoApp", ["ngDragDrop"])
     .service("taskStateService", TaskStateService)

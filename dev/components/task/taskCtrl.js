@@ -1,3 +1,5 @@
+require("./task.css");
+
 export default function TaskCtrl(taskStateService, ToDoListStorage) {
     this.storage = ToDoListStorage;
     this.taskService = taskStateService;

@@ -1,20 +1,19 @@
 <div class="column">
     <h2>{{column}}</h2>
     <ul>
-        <li class="drop-area"
-            data-drop="true"
-            jqyoui-droppable="{onDrop:'currentColumn.onDrop(columnIndex)'}">
-        </li>
-        <li>{{currentColumn.taskService.isAnyTaskInDrag}} </li>
+        <!--<li class="drop-area"-->
+            <!--data-drop="true"-->
+            <!--jqyoui-droppable="{onDrop:'currentColumn.onDrop(columnIndex)'}">-->
+        <!--</li>-->
         <li class="task" ng-show="todoList.storage.newTask.stage === columnIndex">
             <span>{{todoList.storage.newTask.name}}</span>
             <span>{{todoList.storage.newTask.description}}</span>
         </li>
         <li ng-repeat="currentTask in todoList.storage.data | filter:{stage: columnIndex}"
-            data-drag="true"
-            data-jqyoui-options="{revert: 'invalid'}"
-            jqyoui-draggable="{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}"
             task>
         </li>
     </ul>
 </div>
+<!--data-drag="true"-->
+<!--data-jqyoui-options="{revert: 'invalid'}"-->
+<!--jqyoui-draggable="{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}"-->
