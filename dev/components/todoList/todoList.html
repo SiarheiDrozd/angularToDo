@@ -1,5 +1,6 @@
 <div>
-    <button ng-click="todoList.getData()">get data</button>
+    <span>current user: {{todoList.user}}</span><br>
+    <a href="#!/login">go to login</a>
     <form class="new-task-form" ng-submit="todoList.addNewTask()">
         <label for="taskName">Task Name: </label>
         <input id="taskName"
@@ -14,10 +15,13 @@
                ng-model="todoList.storage.newTask.description">
         <button class="button">ADD</button>
     </form>
-    <ul class="columns">
+    <button ng-click="todoList.getData()">get data</button>
+
+    <ul class="columns" ng-show="todoList.storage.data.length > 0">
         <li ng-repeat="column in todoList.storage.columns track by $index"
             ng-init="columnIndex = $index"
             column>
         </li>
     </ul>
+    <span ng-show="todoList.storage.data.length === 0">no data to display</span>
 </div>

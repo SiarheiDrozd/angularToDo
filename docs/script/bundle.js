@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -376,311 +376,6 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-__webpack_require__(12);
-
-function Column(taskStateService, ToDoListStorage) {
-    this.taskService = taskStateService;
-    this.storage = ToDoListStorage;
-}
-Column.prototype.onDrop = function (event, context, columnIndex) {
-    this.taskService.movingTask.stage = columnIndex;
-    this.taskService.movingTask = {};
-    this.taskService.isAnyTaskInDrag = false;
-};
-
-Column.prototype.onStartDrag = function (event, context, task) {
-    this.taskService.movingTask = task;
-    this.taskService.isAnyTaskInDrag = true;
-};
-Column.prototype.onStopDrag = function (event, context, task) {
-    this.taskService.isAnyTaskInDrag = false;
-};
-
-exports.default = Column;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = TaskCtrl;
-__webpack_require__(13);
-
-function TaskCtrl(taskStateService, ToDoListStorage) {
-    this.storage = ToDoListStorage;
-    this.taskService = taskStateService;
-}
-
-TaskCtrl.prototype.moveLeft = function (task) {
-    if (task.stage > 0) {
-        task.stage--;
-    }
-};
-
-TaskCtrl.prototype.moveRight = function (task) {
-    if (task.stage < this.storage.columns.length - 1) {
-        task.stage++;
-    }
-};
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function TaskStateService() {
-    this.movingTask = {};
-    this.isAnyTaskInDrag = false;
-}
-
-exports.default = TaskStateService;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-function ToDoListStorage() {
-    this.columns = ["TODO", "WIP", "TEST", "DONE"];
-    this.data = [];
-    this.newTask = { stage: 0 };
-}
-exports.default = ToDoListStorage;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = TodoListCtrl;
-function TodoListCtrl($http, $scope, ToDoListStorage) {
-    this.storage = ToDoListStorage;
-    this.movingTask = {};
-    this.initTask = { stage: 0, id: -1, name: "", description: "" };
-    this.newTask = angular.copy(this.initTask);
-
-    this.getData = function () {
-        $http.get("/data").then(function (result) {
-            this.storage.data = result.data;
-        }.bind(this));
-    };
-}
-
-TodoListCtrl.prototype.addNewTask = function () {
-    if (this.storage.newTask.name && this.storage.newTask.description) {
-        this.storage.data.push(Object.assign({
-            stage: 0,
-            id: this.storage.data.length
-        }, this.storage.newTask));
-        this.storage.newTask = angular.copy(this.initTask);
-    }
-};
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <!--<li class=\"drop-area\"-->\r\n            <!--data-drop=\"true\"-->\r\n            <!--jqyoui-droppable=\"{onDrop:'currentColumn.onDrop(columnIndex)'}\">-->\r\n        <!--</li>-->\r\n        <li class=\"task\" ng-show=\"todoList.storage.newTask.stage === columnIndex\">\r\n            <span>{{todoList.storage.newTask.name}}</span>\r\n            <span>{{todoList.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in todoList.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n<!--data-drag=\"true\"-->\r\n<!--data-jqyoui-options=\"{revert: 'invalid'}\"-->\r\n<!--jqyoui-draggable=\"{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}\"-->\r\n";
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>move to:</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.columns.length - 1}}\">\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-module.exports = "<div>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    position: relative;\r\n    min-height: 100%;\r\n    /*font-size: 0;*/\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 160px;\r\n    background-color: #efefef;\r\n    vertical-align: top;\r\n}\r\n.column:after {\r\n    content: \"\";\r\n    position: absolute;\r\n    display: block;\r\n    top: 0;\r\n    right: 0;\r\n    margin-right: -13px;\r\n    background-color: #aeaeae;\r\n    height: 100%;\r\n    width: 5px;\r\n}\r\n\r\n.drop-area {\r\n    width: 100%;\r\n    height: 100px;\r\n    background: rgba(0, 0, 0, 0.2);\r\n    border: 5px dashed rgba(0, 0, 0, 0.5);\r\n    font-size: 16px;\r\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 150px;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n}\r\n\r\n.button {\r\n    border: 1px solid #eeeeee;\r\n    background: #ffffff;\r\n    height: 30px;\r\n    width: 50%;\r\n}", ""]);
-
-// exports
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(10);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./columns.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./columns.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(11);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./task.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./task.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _todoListCtrl = __webpack_require__(6);
-
-var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
-
-var _columnCtrl = __webpack_require__(2);
-
-var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
-
-var _taskCtrl = __webpack_require__(3);
-
-var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
-
-var _toDoListStorageService = __webpack_require__(5);
-
-var _toDoListStorageService2 = _interopRequireDefault(_toDoListStorageService);
-
-var _taskStateService = __webpack_require__(4);
-
-var _taskStateService2 = _interopRequireDefault(_taskStateService);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-__webpack_require__(15);
-__webpack_require__(19);
-
-var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/todo-list");
-    $stateProvider.state('todoList', {
-        url: "/todo-list",
-        template: "<todo-list></todo-list>"
-    }).state('login', {
-        url: "/login",
-        template: "<login-page></login-page>"
-    });
-}).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "ToDoListStorage", _todoListCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(18),
-        controller: "loginPageCtrl",
-        controllerAs: "loginPage"
-    };
-}).directive("todoList", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(9),
-        controller: "todoListCtrl",
-        controllerAs: "todoList"
-    };
-}).directive("column", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(7),
-        controller: "column",
-        controllerAs: "currentColumn"
-    };
-}).directive("task", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(8),
-        controller: "taskCtrl",
-        controllerAs: "task"
-    };
-});
-
-exports.default = todoApp;
-
-/***/ }),
-/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -1336,15 +1031,7 @@ exports.default = todoApp;
 
 
 /***/ }),
-/* 16 */,
-/* 17 */,
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = "";
-
-/***/ }),
-/* 19 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /**
@@ -6031,6 +5718,387 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = LoginPageCtrl;
+function LoginPageCtrl($http, $location, globalStorage, dbService) {
+    this.isRegister = false;
+    this.user = {
+        Login: "",
+        Password: ""
+    };
+    this.checkPassword = "";
+    this.globalStorage = globalStorage;
+    this.location = $location;
+}
+
+LoginPageCtrl.prototype.logIn = function () {
+    if (this.isRegister) {
+        if (this.user.Login && this.user.Password) {
+            if (this.user.Password == this.checkPassword) {
+                this.globalStorage.user = this.user;
+                alert("user created");
+                this.location.path("/home");
+            } else {
+                throw Error("passwords not match");
+            }
+        } else {
+            throw Error("parameters invalid");
+        }
+    } else {
+        if (this.user.Login && this.user.Password) {
+            this.globalStorage.user = this.user;
+            alert("login successful");
+            if (true) {
+                this.location.path("/home");
+            }
+        }
+    }
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+__webpack_require__(17);
+
+function Column(taskStateService, ToDoListStorage) {
+    this.taskService = taskStateService;
+    this.storage = ToDoListStorage;
+}
+Column.prototype.onDrop = function (event, context, columnIndex) {
+    this.taskService.movingTask.stage = columnIndex;
+    this.taskService.movingTask = {};
+    this.taskService.isAnyTaskInDrag = false;
+};
+
+Column.prototype.onStartDrag = function (event, context, task) {
+    this.taskService.movingTask = task;
+    this.taskService.isAnyTaskInDrag = true;
+};
+Column.prototype.onStopDrag = function (event, context, task) {
+    this.taskService.isAnyTaskInDrag = false;
+};
+
+exports.default = Column;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/todo-list");
+    $stateProvider.state('todoList', {
+        url: "/todo-list",
+        template: "<todo-list></todo-list>"
+    }).state('login', {
+        url: "/login",
+        template: "<login-page></login-page>"
+    });
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = TaskCtrl;
+__webpack_require__(18);
+
+function TaskCtrl(taskStateService, ToDoListStorage) {
+    this.storage = ToDoListStorage;
+    this.taskService = taskStateService;
+}
+
+TaskCtrl.prototype.moveLeft = function (task) {
+    if (task.stage > 0) {
+        task.stage--;
+    }
+};
+
+TaskCtrl.prototype.moveRight = function (task) {
+    if (task.stage < this.storage.columns.length - 1) {
+        task.stage++;
+    }
+};
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function TaskStateService() {
+    this.movingTask = {};
+    this.isAnyTaskInDrag = false;
+}
+
+exports.default = TaskStateService;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function ToDoListStorage() {
+    this.columns = ["TODO", "WIP", "TEST", "DONE"];
+    this.data = [];
+    this.newTask = { stage: 0 };
+    this.user = null;
+}
+
+exports.default = ToDoListStorage;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = TodoListCtrl;
+function TodoListCtrl($http, $scope, ToDoListStorage) {
+    this.storage = ToDoListStorage;
+    this.movingTask = {};
+    this.initTask = { stage: 0, id: -1, name: "", description: "" };
+    this.newTask = angular.copy(this.initTask);
+    this.user = ToDoListStorage.user;
+
+    this.getData = function () {
+        $http.get("/data").then(function (result) {
+            this.storage.data = result.data;
+        }.bind(this));
+    };
+}
+
+TodoListCtrl.prototype.addNewTask = function () {
+    if (this.storage.newTask.name && this.storage.newTask.description) {
+        this.storage.data.push(Object.assign({
+            stage: 0,
+            id: this.storage.data.length
+        }, this.storage.newTask));
+        this.storage.newTask = angular.copy(this.initTask);
+    }
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <!--<li class=\"drop-area\"-->\r\n            <!--data-drop=\"true\"-->\r\n            <!--jqyoui-droppable=\"{onDrop:'currentColumn.onDrop(columnIndex)'}\">-->\r\n        <!--</li>-->\r\n        <li class=\"task\" ng-show=\"todoList.storage.newTask.stage === columnIndex\">\r\n            <span>{{todoList.storage.newTask.name}}</span>\r\n            <span>{{todoList.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in todoList.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n<!--data-drag=\"true\"-->\r\n<!--data-jqyoui-options=\"{revert: 'invalid'}\"-->\r\n<!--jqyoui-draggable=\"{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}\"-->\r\n";
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.Login\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.Password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">register</button>\r\n    </div>\r\n</div>\r\n</form>";
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>move to:</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.columns.length - 1}}\">\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = "<div>\r\n    <span>current user: {{todoList.user}}</span><br>\r\n    <a href=\"#!/login\">go to login</a>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    position: relative;\r\n    min-height: 100%;\r\n    /*font-size: 0;*/\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 160px;\r\n    background-color: #efefef;\r\n    vertical-align: top;\r\n}\r\n.column:after {\r\n    content: \"\";\r\n    position: absolute;\r\n    display: block;\r\n    top: 0;\r\n    right: 0;\r\n    margin-right: -13px;\r\n    background-color: #aeaeae;\r\n    height: 100%;\r\n    width: 5px;\r\n}\r\n\r\n.drop-area {\r\n    width: 100%;\r\n    height: 100px;\r\n    background: rgba(0, 0, 0, 0.2);\r\n    border: 5px dashed rgba(0, 0, 0, 0.5);\r\n    font-size: 16px;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 150px;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n}\r\n\r\n.button {\r\n    border: 1px solid #eeeeee;\r\n    background: #ffffff;\r\n    height: 30px;\r\n    width: 50%;\r\n}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(15);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./columns.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./columns.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(16);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./task.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./task.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _todoListCtrl = __webpack_require__(10);
+
+var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
+
+var _columnCtrl = __webpack_require__(5);
+
+var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
+
+var _taskCtrl = __webpack_require__(7);
+
+var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
+
+var _LoginPageCtrl = __webpack_require__(4);
+
+var _LoginPageCtrl2 = _interopRequireDefault(_LoginPageCtrl);
+
+var _toDoListStorageService = __webpack_require__(9);
+
+var _toDoListStorageService2 = _interopRequireDefault(_toDoListStorageService);
+
+var _taskStateService = __webpack_require__(8);
+
+var _taskStateService2 = _interopRequireDefault(_taskStateService);
+
+var _routing = __webpack_require__(6);
+
+var _routing2 = _interopRequireDefault(_routing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+__webpack_require__(2);
+__webpack_require__(3);
+
+var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(12),
+        controller: "loginPageCtrl",
+        controllerAs: "loginPage"
+    };
+}).directive("todoList", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(14),
+        controller: "todoListCtrl",
+        controllerAs: "todoList"
+    };
+}).directive("column", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(11),
+        controller: "column",
+        controllerAs: "currentColumn"
+    };
+}).directive("task", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(13),
+        controller: "taskCtrl",
+        controllerAs: "task"
+    };
+});
+
+exports.default = todoApp;
 
 /***/ })
 /******/ ]);
