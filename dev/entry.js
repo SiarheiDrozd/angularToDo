@@ -19,7 +19,7 @@ let todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"])
     .service("ToDoListStorage", ToDoListStorage)
     .service("DataBaseService", ["$http", DataBaseService])
 
-    .controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", TodoListCtrl])
+    .controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", TodoListCtrl])
     .controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", LoginPageCtrl])
     .controller("column", ["taskStateService", "ToDoListStorage", ColumnCtrl])
     .controller("taskCtrl", ["taskStateService", "ToDoListStorage", TaskCtrl])

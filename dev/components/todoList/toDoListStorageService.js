@@ -8,6 +8,7 @@ function ToDoListStorage() {
     this.data = [];
     this.newTask = {stage: 0};
     this.user = null;
+    this.isLogged = false;
 }
 
 export default ToDoListStorage;

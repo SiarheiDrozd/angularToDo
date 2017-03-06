@@ -7,12 +7,17 @@ export default function DataBaseService( $http ) {
     this.connect = function ( user ) {
         $http.post( "/dbConnect", user )
             .then(function ( result ) {
-                console.log(result);
                 return result;
-            }.bind(this));
+            }.bind(this))
+            .catch(function (err) {
+                // alert(err);
+            });
     };
     this.getData = function ( query ) {
-
+        return $http.get("/data")
+            .then(function ( result ) {
+                return result;
+            }.bind(this));
     };
     this.createData = function ( dataToCreate ) {
 

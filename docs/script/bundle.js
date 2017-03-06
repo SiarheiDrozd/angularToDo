@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -5745,13 +5745,8 @@ function LoginPageCtrl($http, $location, globalStorage, dbService) {
 LoginPageCtrl.prototype.logIn = function () {
     if (this.user.Login && this.user.Password) {
         this.globalStorage.user = this.user;
-        console.log(this.user);
+        this.globalStorage.isLogged = true;
         this.dbService.connect(this.user);
-        // this.globalStorage.data =
-        // alert("login successful");
-        // if(true){
-        //     this.location.path("/home");
-        // }
     }
 };
 LoginPageCtrl.prototype.registration = function () {
@@ -5778,7 +5773,7 @@ LoginPageCtrl.prototype.registration = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(17);
+__webpack_require__(18);
 
 function Column(taskStateService, ToDoListStorage) {
     this.taskService = taskStateService;
@@ -5810,6 +5805,40 @@ exports.default = Column;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = DataBaseService;
+function DataBaseService($http) {
+    this.connected = false;
+
+    this.isConnected = function () {
+        return this.connected;
+    };
+    this.connect = function (user) {
+        $http.post("/dbConnect", user).then(function (result) {
+            return result;
+        }.bind(this)).catch(function (err) {
+            // alert(err);
+        });
+    };
+    this.getData = function (query) {
+        return $http.get("/data").then(function (result) {
+            return result;
+        }.bind(this));
+    };
+    this.createData = function (dataToCreate) {};
+    this.updateData = function (dataToUpdate) {};
+    this.deleteData = function (dataToDelete) {};
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 exports.default = function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/todo-list");
@@ -5823,7 +5852,7 @@ exports.default = function ($stateProvider, $urlRouterProvider) {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5833,7 +5862,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TaskCtrl;
-__webpack_require__(18);
+__webpack_require__(19);
 
 function TaskCtrl(taskStateService, ToDoListStorage) {
     this.storage = ToDoListStorage;
@@ -5853,7 +5882,7 @@ TaskCtrl.prototype.moveRight = function (task) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5870,7 +5899,7 @@ function TaskStateService() {
 exports.default = TaskStateService;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5884,12 +5913,13 @@ function ToDoListStorage() {
     this.data = [];
     this.newTask = { stage: 0 };
     this.user = null;
+    this.isLogged = false;
 }
 
 exports.default = ToDoListStorage;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5899,17 +5929,19 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TodoListCtrl;
-function TodoListCtrl($http, $scope, ToDoListStorage) {
+function TodoListCtrl(ToDoListStorage, DataBaseService) {
     this.storage = ToDoListStorage;
     this.movingTask = {};
     this.initTask = { stage: 0, id: -1, name: "", description: "" };
     this.newTask = angular.copy(this.initTask);
     this.user = ToDoListStorage.user;
+    this.isLogged = this.storage.isLogged;
 
     this.getData = function () {
-        $http.get("/data").then(function (result) {
-            this.storage.data = result.data;
-        }.bind(this));
+        var storage = this.storage;
+        DataBaseService.getData().then(function (result) {
+            storage.data = result.data;
+        });
     };
 }
 
@@ -5924,31 +5956,31 @@ TodoListCtrl.prototype.addNewTask = function () {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <!--<li class=\"drop-area\"-->\r\n            <!--data-drop=\"true\"-->\r\n            <!--jqyoui-droppable=\"{onDrop:'currentColumn.onDrop(columnIndex)'}\">-->\r\n        <!--</li>-->\r\n        <li class=\"task\" ng-show=\"todoList.storage.newTask.stage === columnIndex\">\r\n            <span>{{todoList.storage.newTask.name}}</span>\r\n            <span>{{todoList.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in todoList.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n<!--data-drag=\"true\"-->\r\n<!--data-jqyoui-options=\"{revert: 'invalid'}\"-->\r\n<!--jqyoui-draggable=\"{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}\"-->\r\n";
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.Login\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.Password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>";
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>move to:</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.columns.length - 1}}\">\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n    <span>current user: {{todoList.user}}</span><br>\r\n    <a href=\"#!/login\">go to login</a>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
+module.exports = "<div>\r\n    <!--<span>current user: {{todoList.user}}</span><br>-->\r\n    <a href=\"#!/login\" ng-hide=\"todoList.isLogged\">go to login</a>\r\n    <a href=\"#!/login\" ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</a>\r\n\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5962,7 +5994,7 @@ exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5976,13 +6008,13 @@ exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 150px;\r\
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(15);
+var content = __webpack_require__(16);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -6002,13 +6034,13 @@ if(false) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(16);
+var content = __webpack_require__(17);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -6028,86 +6060,6 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _todoListCtrl = __webpack_require__(10);
-
-var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
-
-var _columnCtrl = __webpack_require__(5);
-
-var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
-
-var _taskCtrl = __webpack_require__(7);
-
-var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
-
-var _LoginPageCtrl = __webpack_require__(4);
-
-var _LoginPageCtrl2 = _interopRequireDefault(_LoginPageCtrl);
-
-var _toDoListStorageService = __webpack_require__(9);
-
-var _toDoListStorageService2 = _interopRequireDefault(_toDoListStorageService);
-
-var _taskStateService = __webpack_require__(8);
-
-var _taskStateService2 = _interopRequireDefault(_taskStateService);
-
-var _dataBaseService = __webpack_require__(20);
-
-var _dataBaseService2 = _interopRequireDefault(_dataBaseService);
-
-var _routing = __webpack_require__(6);
-
-var _routing2 = _interopRequireDefault(_routing);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-__webpack_require__(2);
-__webpack_require__(3);
-
-var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(12),
-        controller: "loginPageCtrl",
-        controllerAs: "loginPage"
-    };
-}).directive("todoList", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(14),
-        controller: "todoListCtrl",
-        controllerAs: "todoList"
-    };
-}).directive("column", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(11),
-        controller: "column",
-        controllerAs: "currentColumn"
-    };
-}).directive("task", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(13),
-        controller: "taskCtrl",
-        controllerAs: "task"
-    };
-});
-
-exports.default = todoApp;
-
-/***/ }),
 /* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6117,24 +6069,75 @@ exports.default = todoApp;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = DataBaseService;
-function DataBaseService($http) {
-    this.connected = false;
 
-    this.isConnected = function () {
-        return this.connected;
+var _todoListCtrl = __webpack_require__(11);
+
+var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
+
+var _columnCtrl = __webpack_require__(5);
+
+var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
+
+var _taskCtrl = __webpack_require__(8);
+
+var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
+
+var _LoginPageCtrl = __webpack_require__(4);
+
+var _LoginPageCtrl2 = _interopRequireDefault(_LoginPageCtrl);
+
+var _toDoListStorageService = __webpack_require__(10);
+
+var _toDoListStorageService2 = _interopRequireDefault(_toDoListStorageService);
+
+var _taskStateService = __webpack_require__(9);
+
+var _taskStateService2 = _interopRequireDefault(_taskStateService);
+
+var _dataBaseService = __webpack_require__(6);
+
+var _dataBaseService2 = _interopRequireDefault(_dataBaseService);
+
+var _routing = __webpack_require__(7);
+
+var _routing2 = _interopRequireDefault(_routing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+__webpack_require__(2);
+__webpack_require__(3);
+
+var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(13),
+        controller: "loginPageCtrl",
+        controllerAs: "loginPage"
     };
-    this.connect = function (user) {
-        return $http.post("/dbConnect", user).then(function (result) {
-            console.log(result);
-            return result;
-        }.bind(this));
+}).directive("todoList", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(15),
+        controller: "todoListCtrl",
+        controllerAs: "todoList"
     };
-    this.getData = function (query) {};
-    this.createData = function (dataToCreate) {};
-    this.updateData = function (dataToUpdate) {};
-    this.deleteData = function (dataToDelete) {};
-}
+}).directive("column", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(12),
+        controller: "column",
+        controllerAs: "currentColumn"
+    };
+}).directive("task", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(14),
+        controller: "taskCtrl",
+        controllerAs: "task"
+    };
+});
+
+exports.default = todoApp;
 
 /***/ })
 /******/ ]);

@@ -1,16 +1,18 @@
-export default function TodoListCtrl( $http, $scope, ToDoListStorage ) {
+export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
     this.storage = ToDoListStorage;
     this.movingTask = {};
     this.initTask = {stage:0, id:-1, name: "", description: ""};
     this.newTask = angular.copy(this.initTask);
     this.user = ToDoListStorage.user;
+    this.isLogged = this.storage.isLogged;
 
     this.getData = function () {
-        $http.get("/data")
-            .then(function ( result ) {
-                this.storage.data = result.data;
-            }.bind(this));
-    };
+        let storage = this.storage;
+        DataBaseService.getData()
+            .then(function (result) {
+            storage.data = result.data;
+        });
+    }
 }
 
 TodoListCtrl.prototype.addNewTask = function () {

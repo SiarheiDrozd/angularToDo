@@ -13,13 +13,8 @@ export default function LoginPageCtrl($http, $location, globalStorage, dbService
 LoginPageCtrl.prototype.logIn = function () {
     if(this.user.Login && this.user.Password) {
         this.globalStorage.user = this.user;
-        console.log(this.user);
+        this.globalStorage.isLogged = true;
         this.dbService.connect(this.user);
-        // this.globalStorage.data =
-        // alert("login successful");
-        // if(true){
-        //     this.location.path("/home");
-        // }
     }
 };
 LoginPageCtrl.prototype.registration = function () {
