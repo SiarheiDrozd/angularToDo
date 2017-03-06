@@ -5,6 +5,7 @@ import LoginPageCtrl from "./components/Login/LoginPageCtrl";
 
 import ToDoListStorage from "./components/todoList/toDoListStorageService";
 import TaskStateService from "./components/task/taskStateService";
+import DataBaseService from "./components/dataBase/dataBaseService";
 
 import routing from "./components/routing/routing";
 
@@ -16,9 +17,10 @@ let todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"])
 
     .service("taskStateService", TaskStateService)
     .service("ToDoListStorage", ToDoListStorage)
+    .service("DataBaseService", ["$http", DataBaseService])
 
     .controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", TodoListCtrl])
-    .controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", LoginPageCtrl])
+    .controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", LoginPageCtrl])
     .controller("column", ["taskStateService", "ToDoListStorage", ColumnCtrl])
     .controller("taskCtrl", ["taskStateService", "ToDoListStorage", TaskCtrl])
 

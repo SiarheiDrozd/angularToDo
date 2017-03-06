@@ -5739,29 +5739,32 @@ function LoginPageCtrl($http, $location, globalStorage, dbService) {
     this.checkPassword = "";
     this.globalStorage = globalStorage;
     this.location = $location;
+    this.dbService = dbService;
 }
 
 LoginPageCtrl.prototype.logIn = function () {
-    if (this.isRegister) {
-        if (this.user.Login && this.user.Password) {
-            if (this.user.Password == this.checkPassword) {
-                this.globalStorage.user = this.user;
-                alert("user created");
-                this.location.path("/home");
-            } else {
-                throw Error("passwords not match");
-            }
+    if (this.user.Login && this.user.Password) {
+        this.globalStorage.user = this.user;
+        console.log(this.user);
+        this.dbService.connect(this.user);
+        // this.globalStorage.data =
+        // alert("login successful");
+        // if(true){
+        //     this.location.path("/home");
+        // }
+    }
+};
+LoginPageCtrl.prototype.registration = function () {
+    if (this.user.Login && this.user.Password) {
+        if (this.user.Password == this.checkPassword) {
+            this.globalStorage.user = this.user;
+            alert("user created");
+            this.location.path("/home");
         } else {
-            throw Error("parameters invalid");
+            throw Error("passwords not match");
         }
     } else {
-        if (this.user.Login && this.user.Password) {
-            this.globalStorage.user = this.user;
-            alert("login successful");
-            if (true) {
-                this.location.path("/home");
-            }
-        }
+        throw Error("parameters invalid");
     }
 };
 
@@ -5930,7 +5933,7 @@ module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.Login\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.Password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">register</button>\r\n    </div>\r\n</div>\r\n</form>";
+module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.Login\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.Password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>";
 
 /***/ }),
 /* 13 */
@@ -6059,6 +6062,10 @@ var _taskStateService = __webpack_require__(8);
 
 var _taskStateService2 = _interopRequireDefault(_taskStateService);
 
+var _dataBaseService = __webpack_require__(20);
+
+var _dataBaseService2 = _interopRequireDefault(_dataBaseService);
+
 var _routing = __webpack_require__(6);
 
 var _routing2 = _interopRequireDefault(_routing);
@@ -6068,7 +6075,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 __webpack_require__(2);
 __webpack_require__(3);
 
-var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
+var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["$http", "$scope", "ToDoListStorage", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
     return {
         restrict: "AE",
         template: __webpack_require__(12),
@@ -6099,6 +6106,35 @@ var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_rou
 });
 
 exports.default = todoApp;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = DataBaseService;
+function DataBaseService($http) {
+    this.connected = false;
+
+    this.isConnected = function () {
+        return this.connected;
+    };
+    this.connect = function (user) {
+        return $http.post("/dbConnect", user).then(function (result) {
+            console.log(result);
+            return result;
+        }.bind(this));
+    };
+    this.getData = function (query) {};
+    this.createData = function (dataToCreate) {};
+    this.updateData = function (dataToUpdate) {};
+    this.deleteData = function (dataToDelete) {};
+}
 
 /***/ })
 /******/ ]);
