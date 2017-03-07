@@ -5,19 +5,16 @@ export default function DataBaseService( $http ) {
         return this.connected;
     };
     this.connect = function ( user ) {
-        $http.post( "/dbConnect", user )
-            .then(function ( result ) {
-                return result;
-            }.bind(this))
+        return $http.post( "/dbConnect", user )
             .catch(function (err) {
-                // alert(err);
+                console.log(err);
             });
     };
     this.getData = function ( query ) {
         return $http.get("/data")
             .then(function ( result ) {
                 return result;
-            }.bind(this));
+            });
     };
     this.createData = function ( dataToCreate ) {
 

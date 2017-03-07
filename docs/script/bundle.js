@@ -5736,6 +5736,7 @@ function LoginPageCtrl($http, $location, globalStorage, dbService) {
         Login: "",
         Password: ""
     };
+    this.isLogged = false;
     this.checkPassword = "";
     this.globalStorage = globalStorage;
     this.location = $location;
@@ -5744,9 +5745,18 @@ function LoginPageCtrl($http, $location, globalStorage, dbService) {
 
 LoginPageCtrl.prototype.logIn = function () {
     if (this.user.Login && this.user.Password) {
+
         this.globalStorage.user = this.user;
-        this.globalStorage.isLogged = true;
-        this.dbService.connect(this.user);
+        var that = this;
+
+        this.dbService.connect(this.user).then(function (result) {
+            if (result.data) {
+                that.globalStorage.isLogged = true;
+                that.location.path("/home");
+            } else {
+                alert("wrong username or password");
+            }
+        });
     }
 };
 LoginPageCtrl.prototype.registration = function () {
@@ -5813,16 +5823,14 @@ function DataBaseService($http) {
         return this.connected;
     };
     this.connect = function (user) {
-        $http.post("/dbConnect", user).then(function (result) {
-            return result;
-        }.bind(this)).catch(function (err) {
-            // alert(err);
+        return $http.post("/dbConnect", user).catch(function (err) {
+            console.log(err);
         });
     };
     this.getData = function (query) {
         return $http.get("/data").then(function (result) {
             return result;
-        }.bind(this));
+        });
     };
     this.createData = function (dataToCreate) {};
     this.updateData = function (dataToUpdate) {};

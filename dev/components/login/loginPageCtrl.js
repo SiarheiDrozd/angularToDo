@@ -4,6 +4,7 @@ export default function LoginPageCtrl($http, $location, globalStorage, dbService
         Login: "",
         Password: ""
     };
+    this.isLogged = false;
     this.checkPassword = "";
     this.globalStorage = globalStorage;
     this.location = $location;
@@ -12,9 +13,19 @@ export default function LoginPageCtrl($http, $location, globalStorage, dbService
 
 LoginPageCtrl.prototype.logIn = function () {
     if(this.user.Login && this.user.Password) {
+
         this.globalStorage.user = this.user;
-        this.globalStorage.isLogged = true;
-        this.dbService.connect(this.user);
+        var that = this;
+
+        this.dbService.connect(this.user)
+            .then(function(result){
+                if(result.data){
+                    that.globalStorage.isLogged = true;
+                    that.location.path("/home");
+                } else {
+                    alert("wrong username or password");
+                }
+            });
     }
 };
 LoginPageCtrl.prototype.registration = function () {
