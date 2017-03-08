@@ -5937,6 +5937,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TodoListCtrl;
+__webpack_require__(22);
+
 function TodoListCtrl(ToDoListStorage, DataBaseService) {
     this.storage = ToDoListStorage;
     this.movingTask = {};
@@ -5949,6 +5951,8 @@ function TodoListCtrl(ToDoListStorage, DataBaseService) {
         var storage = this.storage;
         DataBaseService.getData().then(function (result) {
             storage.data = result.data;
+        }).catch(function (err) {
+            console.log("data request error", err);
         });
     };
 }
@@ -5985,7 +5989,7 @@ module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n    <!--<span>current user: {{todoList.user}}</span><br>-->\r\n    <a href=\"#!/login\" ng-hide=\"todoList.isLogged\">go to login</a>\r\n    <a href=\"#!/login\" ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</a>\r\n\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n    <a href=\"#!/login\" ng-hide=\"todoList.isLogged\">go to login</a>\r\n    <span ng-show=\"todoList.isLogged\" >Logged as {{todoList.user.Login}} <a href=\"#!/login\">log out</a></span>\r\n\r\n    <br><button ng-click=\"showNewTaskForm = !showNewTaskForm\">add task</button><br>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */
@@ -6146,6 +6150,46 @@ var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_rou
 });
 
 exports.default = todoApp;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n}\r\n.new-task-form {\r\n    position: absolute;\r\n    z-index: 100;\r\n    width: 150px;\r\n    padding: 5px;\r\n    background-color: #bfb1ff;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(21);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./todoList.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./todoList.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

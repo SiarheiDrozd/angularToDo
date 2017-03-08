@@ -6,7 +6,7 @@
     var db, Task;
     var currentUser = { login: "user1", password: "user1pass" };
 
-    let taskSchema = mongoose.Schema({
+    var taskSchema = mongoose.Schema({
         "id": Number,
         "name": String,
         "description": String,
@@ -22,7 +22,7 @@
                 currentUser = newUser;
 
                 mongoose.connection.close();
-                let uri = "mongodb://" + currentUser.Login + ":" + currentUser.Password + "@ds157819.mlab.com:57819/angular_todo_db";
+                var uri = "mongodb://" + currentUser.Login + ":" + currentUser.Password + "@ds157819.mlab.com:57819/angular_todo_db";
                 mongoose.Promise = global.Promise;
 
                 db = mongoose.createConnection(uri);
@@ -38,7 +38,7 @@
     });
 
 
-    app.get('/data', function ( req, result ) {
+    app.get('/data', function ( request, result ) {
         if (db) {
             Task = db.model('tasks', taskSchema);
 

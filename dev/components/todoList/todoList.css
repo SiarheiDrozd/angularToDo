@@ -1,0 +1,18 @@
+.todo-list {
+    position: relative;
+}
+.new-task-form {
+    position: absolute;
+    z-index: 100;
+    width: 150px;
+    padding: 5px;
+    background-color: #bfb1ff;
+}
+
+.new-task-input {
+    width: 100%;
+}
+
+.new-task-label {
+    width: 100%;
+}

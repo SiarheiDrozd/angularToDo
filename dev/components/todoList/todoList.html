@@ -1,9 +1,9 @@
-<div>
-    <!--<span>current user: {{todoList.user}}</span><br>-->
+<div class="todo-list">
     <a href="#!/login" ng-hide="todoList.isLogged">go to login</a>
-    <a href="#!/login" ng-show="todoList.isLogged">Logged as {{todoList.user.Login}}</a>
+    <span ng-show="todoList.isLogged" >Logged as {{todoList.user.Login}} <a href="#!/login">log out</a></span>
 
-    <form class="new-task-form" ng-submit="todoList.addNewTask()">
+    <br><button ng-click="showNewTaskForm = !showNewTaskForm">add task</button><br>
+    <form class="new-task-form" ng-submit="todoList.addNewTask()" ng-show="showNewTaskForm">
         <label for="taskName">Task Name: </label>
         <input id="taskName"
                type="text"

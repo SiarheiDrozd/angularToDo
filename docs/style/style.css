@@ -13,19 +13,6 @@ ul {
     list-style: none;
 }
 
-.new-task-form {
-    width: 150px;
-    padding: 5px;
-    background-color: #bfb1ff;
-}
-
-.new-task-input {
-    width: 100%;
-}
-
-.new-task-label {
-    width: 100%;
-}
 h2 {
     font-size: 24px;
 }

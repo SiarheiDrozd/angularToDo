@@ -1,3 +1,5 @@
+require("./todoList.css");
+
 export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
     this.storage = ToDoListStorage;
     this.movingTask = {};
@@ -10,8 +12,10 @@ export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
         let storage = this.storage;
         DataBaseService.getData()
             .then(function (result) {
-            storage.data = result.data;
-        });
+                storage.data = result.data;
+            }).catch(function (err) {
+                console.log("data request error", err)
+            });
     }
 }
 
