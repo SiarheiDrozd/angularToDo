@@ -1,4 +1,5 @@
 require("./todoList.css");
+require("../newTaskForm/newTaskForm.css");
 
 export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
     this.storage = ToDoListStorage;

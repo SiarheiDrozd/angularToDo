@@ -1,12 +1,29 @@
 .todo-list {
     position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #A9EFD4;
 }
-.new-task-form {
-    position: absolute;
-    z-index: 100;
+.todo-list-heading {
+    width: 100%;
+    height: 40px;
+    background-color: #629884;
+}
+.todo-list-heading .button {
+    padding: 0 10px;
+    height: 100%;
+    line-height: 40px;
+}
+.logout-button {
+    height: auto;
+}
+.new-task-button {
     width: 150px;
-    padding: 5px;
-    background-color: #bfb1ff;
+    font-size: 20px;
 }
 
 .new-task-input {
@@ -15,4 +32,12 @@
 
 .new-task-label {
     width: 100%;
+}
+
+.login-block {
+    height: 100%;
+    align-self: flex-end;
+}
+.logout-button {
+    display: block;
 }

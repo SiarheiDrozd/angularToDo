@@ -1,0 +1,12 @@
+.new-task-form {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 150px;
+    padding: 5px;
+    background-color: #629884;
+}
+.new-task-form .button {
+    width: 100%;
+    margin-top: 10px;
+}

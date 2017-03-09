@@ -1,20 +1,46 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 html, body {
     box-sizing: border-box;
     font-size: 16px;
     min-height: 100vh;
+    background-color: #C7EFE0;
+    color: #ffffff;
+    font-family: 'Ubuntu', sans-serif;
 }
-
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
 ul {
     list-style: none;
 }
 
 h2 {
+    text-align: center;
     font-size: 24px;
+}
+
+.wrapper {
+    width: 1170px;
+    margin: 0 auto;
+}
+
+.button {
+    display: block;
+    height: 25px;
+    border: none;
+    text-align: center;
+    color: #ffffff;
+    background-color: #6FCAA7;
+}
+.button:hover {
+    background-color: #268662;
+
 }
 
 .clearfix:after {

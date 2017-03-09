@@ -12,7 +12,7 @@ import routing from "./components/routing/routing";
 require("angular-drag-and-drop-lists");
 require("angular-ui-router");
 
-let todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"])
+let todoApp = angular.module("ToDoApp", ["ui.router"])
     .config(routing)
 
     .service("taskStateService", TaskStateService)

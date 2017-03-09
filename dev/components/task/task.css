@@ -1,18 +1,18 @@
 .task {
     font-size: 16px;
-    width: 150px;
+    width: 100%;
     margin: 5px 0;
     background: #ffffff;
     text-align: center;
 }
 
-.task span {
-    display: block;
+.task .button {
+    width: 50%;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
-.button {
-    border: 1px solid #eeeeee;
-    background: #ffffff;
-    height: 30px;
-    width: 50%;
+.task span {
+    display: block;
+    color: #000;
 }

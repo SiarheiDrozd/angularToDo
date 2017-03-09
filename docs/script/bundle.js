@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -5783,7 +5783,7 @@ LoginPageCtrl.prototype.registration = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(18);
+__webpack_require__(20);
 
 function Column(taskStateService, ToDoListStorage) {
     this.taskService = taskStateService;
@@ -5870,7 +5870,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TaskCtrl;
-__webpack_require__(19);
+__webpack_require__(22);
 
 function TaskCtrl(taskStateService, ToDoListStorage) {
     this.storage = ToDoListStorage;
@@ -5937,7 +5937,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TodoListCtrl;
-__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(21);
 
 function TodoListCtrl(ToDoListStorage, DataBaseService) {
     this.storage = ToDoListStorage;
@@ -5983,13 +5984,13 @@ module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>move to:</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.columns.length - 1}}\">\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <!--<span>move to:</span>-->\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n    <a href=\"#!/login\" ng-hide=\"todoList.isLogged\">go to login</a>\r\n    <span ng-show=\"todoList.isLogged\" >Logged as {{todoList.user.Login}} <a href=\"#!/login\">log out</a></span>\r\n\r\n    <br><button ng-click=\"showNewTaskForm = !showNewTaskForm\">add task</button><br>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\">get data</button>\r\n\r\n    <ul class=\"columns\" ng-show=\"todoList.storage.data.length > 0\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <span ng-show=\"todoList.storage.data.length === 0\">no data to display</span>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">get data</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */
@@ -6000,7 +6001,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    position: relative;\r\n    min-height: 100%;\r\n    /*font-size: 0;*/\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 160px;\r\n    background-color: #efefef;\r\n    vertical-align: top;\r\n}\r\n.column:after {\r\n    content: \"\";\r\n    position: absolute;\r\n    display: block;\r\n    top: 0;\r\n    right: 0;\r\n    margin-right: -13px;\r\n    background-color: #aeaeae;\r\n    height: 100%;\r\n    width: 5px;\r\n}\r\n\r\n.drop-area {\r\n    width: 100%;\r\n    height: 100px;\r\n    background: rgba(0, 0, 0, 0.2);\r\n    border: 5px dashed rgba(0, 0, 0, 0.5);\r\n    font-size: 16px;\r\n}\r\n", ""]);
+exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    position: relative;\r\n    min-height: 100%;\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 200px;\r\n    background-color: #629884;\r\n    vertical-align: top;\r\n}\r\n", ""]);
 
 // exports
 
@@ -6014,13 +6015,41 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 150px;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n}\r\n\r\n.button {\r\n    border: 1px solid #eeeeee;\r\n    background: #ffffff;\r\n    height: 30px;\r\n    width: 50%;\r\n}", ""]);
+exports.push([module.i, ".new-task-form {\r\n    position: absolute;\r\n    top: 40px;\r\n    left: 0;\r\n    width: 150px;\r\n    padding: 5px;\r\n    background-color: #629884;\r\n}\r\n.new-task-form .button {\r\n    width: 100%;\r\n    margin-top: 10px;\r\n}", ""]);
 
 // exports
 
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 100%;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task .button {\r\n    width: 50%;\r\n    margin-top: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n    color: #000;\r\n}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n    width: 100%;\r\n    min-height: 100vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    background-color: #A9EFD4;\r\n}\r\n.todo-list-heading {\r\n    width: 100%;\r\n    height: 40px;\r\n    background-color: #629884;\r\n}\r\n.todo-list-heading .button {\r\n    padding: 0 10px;\r\n    height: 100%;\r\n    line-height: 40px;\r\n}\r\n.logout-button {\r\n    height: auto;\r\n}\r\n.new-task-button {\r\n    width: 150px;\r\n    font-size: 20px;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n\r\n.login-block {\r\n    height: 100%;\r\n    align-self: flex-end;\r\n}\r\n.logout-button {\r\n    display: block;\r\n}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -6046,13 +6075,39 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(17);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./newTaskForm.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./newTaskForm.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(18);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -6072,7 +6127,33 @@ if(false) {
 }
 
 /***/ }),
-/* 20 */
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(19);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./todoList.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./todoList.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6119,7 +6200,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 __webpack_require__(2);
 __webpack_require__(3);
 
-var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
+var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
     return {
         restrict: "AE",
         template: __webpack_require__(13),
@@ -6150,46 +6231,6 @@ var todoApp = angular.module("ToDoApp", ["ngDragDrop", "ui.router"]).config(_rou
 });
 
 exports.default = todoApp;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n}\r\n.new-task-form {\r\n    position: absolute;\r\n    z-index: 100;\r\n    width: 150px;\r\n    padding: 5px;\r\n    background-color: #bfb1ff;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(21);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./todoList.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./todoList.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
