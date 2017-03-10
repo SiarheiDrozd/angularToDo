@@ -5760,11 +5760,17 @@ LoginPageCtrl.prototype.logIn = function () {
     }
 };
 LoginPageCtrl.prototype.registration = function () {
+    console.log("registration");
+
     if (this.user.Login && this.user.Password) {
         if (this.user.Password == this.checkPassword) {
-            this.globalStorage.user = this.user;
-            alert("user created");
-            this.location.path("/home");
+            var that = this;
+            console.log(this.user);
+
+            this.dbService.register(this.user).then(function (result) {
+                console.log(result);
+                that.location.path("/home");
+            });
         } else {
             throw Error("passwords not match");
         }
@@ -5827,8 +5833,13 @@ function DataBaseService($http) {
             console.log(err);
         });
     };
-    this.getData = function (query) {
-        return $http.get("/data").then(function (result) {
+    this.register = function (user) {
+        return $http.post("/dbRegister", user).catch(function (err) {
+            console.log(err);
+        });
+    };
+    this.getData = function (dataToGet) {
+        return $http.get("/data/user1", dataToGet).then(function (result) {
             return result;
         });
     };
@@ -5964,7 +5975,8 @@ function TodoListCtrl(ToDoListStorage, DataBaseService) {
 
     this.getData = function () {
         var storage = this.storage;
-        DataBaseService.getData().then(function (result) {
+        var dataToGet = { data: this.storage.data, user: this.user };
+        DataBaseService.getData(dataToGet).then(function (result) {
             storage.data = Object.assign(result.data, storage.data);
             storage.updateLocalStorage();
         }).catch(function (err) {

@@ -11,7 +11,8 @@ export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
 
     this.getData = function () {
         let storage = this.storage;
-        DataBaseService.getData()
+        var dataToGet = {data: this.storage.data, user: this.user};
+        DataBaseService.getData(dataToGet)
             .then(function (result) {
                 storage.data = Object.assign(result.data, storage.data );
                 storage.updateLocalStorage();

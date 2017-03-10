@@ -29,11 +29,18 @@ LoginPageCtrl.prototype.logIn = function () {
     }
 };
 LoginPageCtrl.prototype.registration = function () {
+    console.log("registration");
+
     if(this.user.Login && this.user.Password) {
         if(this.user.Password == this.checkPassword){
-            this.globalStorage.user = this.user;
-            alert("user created");
-            this.location.path("/home");
+            var that = this;
+            console.log(this.user);
+
+            this.dbService.register(this.user)
+                .then(function ( result ) {
+                    console.log(result);
+                    that.location.path("/home");
+                });
         } else {
             throw Error("passwords not match")
         }

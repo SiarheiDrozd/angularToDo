@@ -10,8 +10,14 @@ export default function DataBaseService( $http ) {
                 console.log(err);
             });
     };
-    this.getData = function ( query ) {
-        return $http.get("/data")
+    this.register = function ( user ) {
+        return $http.post( "/dbRegister", user )
+            .catch(function (err) {
+                console.log(err);
+            });
+    };
+    this.getData = function ( dataToGet ) {
+        return $http.get("/data/user1", dataToGet)
             .then(function ( result ) {
                 return result;
             });
