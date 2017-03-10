@@ -16,8 +16,11 @@ export default function DataBaseService( $http ) {
                 return result;
             });
     };
-    this.createData = function ( dataToCreate ) {
-
+    this.setData = function ( dataToSet ) {
+        return $http.post("/data", dataToSet)
+            .then(function ( result ) {
+                return result;
+            });
     };
     this.updateData = function ( dataToUpdate ) {
 

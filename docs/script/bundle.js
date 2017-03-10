@@ -5832,7 +5832,11 @@ function DataBaseService($http) {
             return result;
         });
     };
-    this.createData = function (dataToCreate) {};
+    this.setData = function (dataToSet) {
+        return $http.post("/data", dataToSet).then(function (result) {
+            return result;
+        });
+    };
     this.updateData = function (dataToUpdate) {};
     this.deleteData = function (dataToDelete) {};
 }
@@ -5880,12 +5884,14 @@ function TaskCtrl(taskStateService, ToDoListStorage) {
 TaskCtrl.prototype.moveLeft = function (task) {
     if (task.stage > 0) {
         task.stage--;
+        this.storage.updateLocalStorage();
     }
 };
 
 TaskCtrl.prototype.moveRight = function (task) {
     if (task.stage < this.storage.columns.length - 1) {
         task.stage++;
+        this.storage.updateLocalStorage();
     }
 };
 
@@ -5922,6 +5928,14 @@ function ToDoListStorage() {
     this.newTask = { stage: 0 };
     this.user = null;
     this.isLogged = false;
+    this.updateLocalStorage = function () {
+        if (typeof Storage !== "undefined") {
+            localStorage.setItem("tasks", JSON.stringify(this.data));
+            console.dir(JSON.parse(localStorage.getItem("tasks")));
+        } else {
+            // Sorry! No Web Storage support..
+        }
+    };
 }
 
 exports.default = ToDoListStorage;
@@ -5943,7 +5957,7 @@ __webpack_require__(21);
 function TodoListCtrl(ToDoListStorage, DataBaseService) {
     this.storage = ToDoListStorage;
     this.movingTask = {};
-    this.initTask = { stage: 0, id: -1, name: "", description: "" };
+    this.initTask = { stage: 0, name: "", description: "" };
     this.newTask = angular.copy(this.initTask);
     this.user = ToDoListStorage.user;
     this.isLogged = this.storage.isLogged;
@@ -5951,9 +5965,16 @@ function TodoListCtrl(ToDoListStorage, DataBaseService) {
     this.getData = function () {
         var storage = this.storage;
         DataBaseService.getData().then(function (result) {
-            storage.data = result.data;
+            storage.data = Object.assign(result.data, storage.data);
+            storage.updateLocalStorage();
         }).catch(function (err) {
             console.log("data request error", err);
+        });
+    };
+    this.setData = function () {
+        var dataToSet = { data: this.storage.data, user: this.user };
+        DataBaseService.setData(dataToSet).then(function (result) {
+            console.log(result);
         });
     };
 }
@@ -5961,9 +5982,9 @@ function TodoListCtrl(ToDoListStorage, DataBaseService) {
 TodoListCtrl.prototype.addNewTask = function () {
     if (this.storage.newTask.name && this.storage.newTask.description) {
         this.storage.data.push(Object.assign({
-            stage: 0,
-            id: this.storage.data.length
+            stage: 0
         }, this.storage.newTask));
+        this.storage.updateLocalStorage();
         this.storage.newTask = angular.copy(this.initTask);
     }
 };
@@ -5972,7 +5993,7 @@ TodoListCtrl.prototype.addNewTask = function () {
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <!--<li class=\"drop-area\"-->\r\n            <!--data-drop=\"true\"-->\r\n            <!--jqyoui-droppable=\"{onDrop:'currentColumn.onDrop(columnIndex)'}\">-->\r\n        <!--</li>-->\r\n        <li class=\"task\" ng-show=\"todoList.storage.newTask.stage === columnIndex\">\r\n            <span>{{todoList.storage.newTask.name}}</span>\r\n            <span>{{todoList.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in todoList.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n<!--data-drag=\"true\"-->\r\n<!--data-jqyoui-options=\"{revert: 'invalid'}\"-->\r\n<!--jqyoui-draggable=\"{animate:true, onStart:'currentColumn.onStartDrag(currentTask)', onStop:'currentColumn.onStopDrag(currentTask)'}\"-->\r\n";
+module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <li class=\"task\" ng-show=\"todoList.storage.newTask.stage === columnIndex\">\r\n            <span>{{todoList.storage.newTask.name}}</span>\r\n            <span>{{todoList.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in todoList.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>";
 
 /***/ }),
 /* 13 */
@@ -5990,7 +6011,7 @@ module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">get data</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">get data</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button\">set data</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */
@@ -6001,7 +6022,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    position: relative;\r\n    min-height: 100%;\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 200px;\r\n    background-color: #629884;\r\n    vertical-align: top;\r\n}\r\n", ""]);
+exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0;\r\n    height: 400px;\r\n}\r\n.columns > li {\r\n    display: inline-block;\r\n    font-size: 1rem;\r\n    height: 100%;\r\n}\r\n\r\n.column {\r\n    display: inline-block;\r\n    min-height: 100%;\r\n    margin: 10px;\r\n    padding: 5px;\r\n    min-width: 200px;\r\n    background-color: #629884;\r\n    vertical-align: top;\r\n}\r\n", ""]);
 
 // exports
 

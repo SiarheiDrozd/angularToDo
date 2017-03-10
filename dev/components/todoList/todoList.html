@@ -26,6 +26,7 @@
         <button class="button">ADD</button>
     </form>
     <button ng-click="todoList.getData()" class="button">get data</button>
+    <button ng-click="todoList.setData()" class="button">set data</button>
 
     <ul class="columns">
         <li ng-repeat="column in todoList.storage.columns track by $index"

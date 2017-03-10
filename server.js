@@ -4,13 +4,12 @@
     var app = express();
     var mongoose = require('mongoose');
     var db, Task;
-    var currentUser = { login: "user1", password: "user1pass" };
+    var currentUser = { Login: "user1", Password: "user1pass" };
 
     var taskSchema = mongoose.Schema({
-        "id": Number,
+        "stage": Number,
         "name": String,
-        "description": String,
-        "stage": Number
+        "description": String
     });
 
     app.use(express.static(__dirname + "/docs/"));
@@ -32,19 +31,53 @@
                 });
                 db.once("open", function () {
                     response.send(true);
+                    db.close();
                 })
             }
         });
     });
 
+    app.post("/data", function ( request, response ) {
+        request.on('data', function ( data ) {
+            var newData = JSON.parse(data);
+
+            if (newData.user && currentUser !== newData.user) {
+                currentUser = newData.user;
+            }
+                mongoose.connection.close();
+                var uri = "mongodb://" + currentUser.Login + ":" + currentUser.Password + "@ds157819.mlab.com:57819/angular_todo_db";
+                mongoose.Promise = global.Promise;
+
+                db = mongoose.createConnection(uri);
+                db.on('error', function ( err ) {
+                    response.send("fail");
+                    db.close();
+                });
+                db.once("open", function () {
+                    Task = db.model(`${currentUser.Login}_tasks`, taskSchema);
+                    newData.data.map(function ( item ) {
+                        Task.find({"_id": item["_id"]}, function ( err, data ) {
+                            if(err) {console.log(err)}
+                            if(!data) {
+                                var task = new Task(item);
+                                task.save();
+                            }
+                        });
+                    });
+                    response.send("success");
+                    db.close();
+                })
+
+        });
+    });
 
     app.get('/data', function ( request, result ) {
         if (db) {
-            Task = db.model('tasks', taskSchema);
+            Task = db.model(`${currentUser.Login}_tasks`, taskSchema);
 
             Task.find({}, function ( err, data ) {
                 if (err) {
-                    handleError(err);
+                    console.log(err);
                 } else {
                     result.send(data);
                 }

@@ -8,11 +8,13 @@ export default function TaskCtrl(taskStateService, ToDoListStorage) {
 TaskCtrl.prototype.moveLeft = function ( task ) {
     if (task.stage > 0) {
         task.stage--;
+        this.storage.updateLocalStorage();
     }
 };
 
 TaskCtrl.prototype.moveRight = function ( task ) {
     if (task.stage < this.storage.columns.length - 1) {
         task.stage++;
+        this.storage.updateLocalStorage();
     }
 };
