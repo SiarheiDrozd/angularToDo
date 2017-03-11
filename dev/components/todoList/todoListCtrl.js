@@ -11,22 +11,22 @@ export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
 
     this.getData = function () {
         let storage = this.storage;
-        var dataToGet = {data: this.storage.data, user: this.user};
-        DataBaseService.getData(dataToGet)
+        let user = this.storage.user;
+        DataBaseService.getData(user)
             .then(function (result) {
-                storage.data = Object.assign(result.data, storage.data );
+                storage.data = Object.assign(storage.data, result.data );
                 storage.updateLocalStorage();
             }).catch(function (err) {
                 console.log("data request error", err)
             });
     };
     this.setData = function () {
-        var dataToSet = {data: this.storage.data, user: this.user};
+        let dataToSet = {data: this.storage.data, user: this.user};
         DataBaseService.setData(dataToSet)
             .then(function (result) {
                 console.log(result);
             })
-    }
+    };
 }
 
 TodoListCtrl.prototype.addNewTask = function () {

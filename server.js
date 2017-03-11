@@ -19,11 +19,12 @@
 
     app.post("/dbConnect", function ( request, response ) {
         request.on('data', function ( data ) {
-            var newUser = JSON.parse(data);
+            let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            Users.findOne({"name": newUser.Login}, function ( err, user ) {
+            console.log("newUser ", newUser);
+            Users.findOne({"name": newUser.name}, function ( err, user ) {
                 if(err){console.log(err)}
-                console.log(user);
+                console.log("connect", user);
                 if(user){
                     response.send(true);
                 } else {
@@ -35,20 +36,20 @@
 
     app.post("/dbRegister", function ( request, response ) {
         request.on('data', function ( data ) {
-            var newUser = JSON.parse(data);
+            let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            console.log(newUser);
+            console.log("register", newUser);
 
-            Users.create({"name": newUser.Login, "password": newUser.Password}, function ( err, user ) {
+            Users.create({"name": newUser.name, "password": newUser.password}, function ( err, user ) {
                 if(err){console.log("error ",err)}
-                console.log(user);
-                response.send(`${user.Login} created`);
+                console.log("register", user);
+                response.send(`${user.name} created`);
             });
         });
     });
 
     app.get('/data/:user', function ( request, result ) {
-        console.log(request.params);
+        console.log("get tasks", request.params);
 
         Task = db.model(`${request.params.user}_tasks`, taskSchema);
         Task.find({}, function ( err, data ) {
@@ -62,18 +63,43 @@
 
     app.post("/data", function ( request, response ) {
         request.on('data', function ( data ) {
-            var newData = JSON.parse(data);
-            console.log(newData, data);
+            let newData = JSON.parse(data);
+            console.log("set tasks ",newData, data);
 
-            Task = db.model(`${newData.user.Login}_tasks`, taskSchema);
-            // Task
+            Task = db.model(`${newData.user.name}_tasks`, taskSchema);
+            newData.data.forEach((task)=>{
+                if(!task._id){
+                    Task.create({
+                        "stage": task.stage,
+                        "name": task.name,
+                        "description": task.description
+                    })
+                } else {
+                    Task.update({ _id: task._id }, { $set: {
+                        "stage": task.stage,
+                        "name": task.name,
+                        "description": task.description
+                    }}, function () {
+
+                    });
+                }
+            });
+            response.send("done");
         });
     });
 
-
+    app.delete("/data/:user/:id", function ( request, response ) {
+        console.log("delete");
+        Task = db.model(`${request.params.user}_tasks`, taskSchema);
+        Task
+            .find({_id: request.params.id})
+            .remove()
+            .exec();
+        response.send(request.params.id + " deleted");
+    });
 
     ( function () {
-        var uri = "mongodb://user1:user1pass@ds157819.mlab.com:57819/angular_todo_db";
+        let uri = "mongodb://user1:user1pass@ds157819.mlab.com:57819/angular_todo_db";
         mongoose.Promise = global.Promise;
 
         db = mongoose.createConnection(uri);

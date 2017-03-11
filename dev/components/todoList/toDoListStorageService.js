@@ -1,4 +1,4 @@
-function ToDoListStorage() {
+function ToDoListStorage(DataBaseService) {
     this.columns = [
         "TODO",
         "WIP",
@@ -9,6 +9,7 @@ function ToDoListStorage() {
     this.newTask = {stage: 0};
     this.user = null;
     this.isLogged = false;
+
     this.updateLocalStorage = function ( ) {
         if (typeof(Storage) !== "undefined") {
             localStorage.setItem("tasks",JSON.stringify(this.data));
@@ -16,7 +17,7 @@ function ToDoListStorage() {
         } else {
             // Sorry! No Web Storage support..
         }
-    }
+    };
 }
 
 export default ToDoListStorage;

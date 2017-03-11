@@ -7,7 +7,7 @@
         </button>
         <div class="login-block float-right">
             <a href="#!/login" class="button" ng-hide="todoList.isLogged">LOGIN / REGISTER</a>
-            <span ng-show="todoList.isLogged">Logged as {{todoList.user.Login}}</span>
+            <span ng-show="todoList.isLogged">Logged as {{todoList.user.name}}</span>
             <a href="#!/login" class="button logout-button" ng-show="todoList.isLogged">log out</a>
         </div>
     </div>
@@ -25,8 +25,8 @@
                ng-model="todoList.storage.newTask.description">
         <button class="button">ADD</button>
     </form>
-    <button ng-click="todoList.getData()" class="button">get data</button>
-    <button ng-click="todoList.setData()" class="button">set data</button>
+    <button ng-click="todoList.getData()" class="button">LOAD</button>
+    <button ng-click="todoList.setData()" class="button">SAVE</button>
 
     <ul class="columns">
         <li ng-repeat="column in todoList.storage.columns track by $index"

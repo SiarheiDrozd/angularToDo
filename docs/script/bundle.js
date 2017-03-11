@@ -5733,8 +5733,8 @@ exports.default = LoginPageCtrl;
 function LoginPageCtrl($http, $location, globalStorage, dbService) {
     this.isRegister = false;
     this.user = {
-        Login: "",
-        Password: ""
+        name: "",
+        password: ""
     };
     this.isLogged = false;
     this.checkPassword = "";
@@ -5744,14 +5744,16 @@ function LoginPageCtrl($http, $location, globalStorage, dbService) {
 }
 
 LoginPageCtrl.prototype.logIn = function () {
-    if (this.user.Login && this.user.Password) {
+    if (this.user.name && this.user.password) {
 
         this.globalStorage.user = this.user;
+
         var that = this;
 
         this.dbService.connect(this.user).then(function (result) {
             if (result.data) {
                 that.globalStorage.isLogged = true;
+                that.globalStorage.data = [];
                 that.location.path("/home");
             } else {
                 alert("wrong username or password");
@@ -5762,8 +5764,8 @@ LoginPageCtrl.prototype.logIn = function () {
 LoginPageCtrl.prototype.registration = function () {
     console.log("registration");
 
-    if (this.user.Login && this.user.Password) {
-        if (this.user.Password == this.checkPassword) {
+    if (this.user.name && this.user.password) {
+        if (this.user.password == this.checkPassword) {
             var that = this;
             console.log(this.user);
 
@@ -5828,28 +5830,38 @@ function DataBaseService($http) {
     this.isConnected = function () {
         return this.connected;
     };
+
     this.connect = function (user) {
         return $http.post("/dbConnect", user).catch(function (err) {
             console.log(err);
         });
     };
+
     this.register = function (user) {
         return $http.post("/dbRegister", user).catch(function (err) {
             console.log(err);
         });
     };
-    this.getData = function (dataToGet) {
-        return $http.get("/data/user1", dataToGet).then(function (result) {
+
+    this.getData = function (user) {
+        return $http.get("/data/" + user.name).then(function (result) {
             return result;
         });
     };
+
     this.setData = function (dataToSet) {
         return $http.post("/data", dataToSet).then(function (result) {
             return result;
         });
     };
+
     this.updateData = function (dataToUpdate) {};
-    this.deleteData = function (dataToDelete) {};
+
+    this.deleteData = function (dataForDelete) {
+        return $http.delete("/data/" + dataForDelete.user.name + "/" + dataForDelete.task._id).catch(function (err) {
+            console.log(err);
+        });
+    };
 }
 
 /***/ }),
@@ -5887,9 +5899,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = TaskCtrl;
 __webpack_require__(22);
 
-function TaskCtrl(taskStateService, ToDoListStorage) {
+function TaskCtrl(taskStateService, ToDoListStorage, DataBaseService) {
     this.storage = ToDoListStorage;
     this.taskService = taskStateService;
+    this.dbService = DataBaseService;
 }
 
 TaskCtrl.prototype.moveLeft = function (task) {
@@ -5904,6 +5917,14 @@ TaskCtrl.prototype.moveRight = function (task) {
         task.stage++;
         this.storage.updateLocalStorage();
     }
+};
+TaskCtrl.prototype.delete = function (task) {
+    var dataForDelete = { task: task, user: this.storage.user };
+    var self = this;
+    this.dbService.deleteData(dataForDelete).then(function (result) {
+        console.log(result);
+        self.storage.data.splice(self.storage.data.indexOf(task), 1);
+    });
 };
 
 /***/ }),
@@ -5933,12 +5954,13 @@ exports.default = TaskStateService;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-function ToDoListStorage() {
+function ToDoListStorage(DataBaseService) {
     this.columns = ["TODO", "WIP", "TEST", "DONE"];
     this.data = [];
     this.newTask = { stage: 0 };
     this.user = null;
     this.isLogged = false;
+
     this.updateLocalStorage = function () {
         if (typeof Storage !== "undefined") {
             localStorage.setItem("tasks", JSON.stringify(this.data));
@@ -5975,9 +5997,9 @@ function TodoListCtrl(ToDoListStorage, DataBaseService) {
 
     this.getData = function () {
         var storage = this.storage;
-        var dataToGet = { data: this.storage.data, user: this.user };
-        DataBaseService.getData(dataToGet).then(function (result) {
-            storage.data = Object.assign(result.data, storage.data);
+        var user = this.storage.user;
+        DataBaseService.getData(user).then(function (result) {
+            storage.data = Object.assign(storage.data, result.data);
             storage.updateLocalStorage();
         }).catch(function (err) {
             console.log("data request error", err);
@@ -6011,19 +6033,19 @@ module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.Login\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.Password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>";
+module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.name\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>\r\n";
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"task clearfix\">\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <!--<span>move to:</span>-->\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\" ng-click=\"task.delete(currentTask)\">X</button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <!--<span>move to:</span>-->\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.Login}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">get data</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button\">set data</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.name}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.storage.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.storage.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */
@@ -6233,7 +6255,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 __webpack_require__(2);
 __webpack_require__(3);
 
-var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", _taskCtrl2.default]).directive("loginPage", function () {
+var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default).service("taskStateService", _taskStateService2.default).service("ToDoListStorage", _toDoListStorageService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", _LoginPageCtrl2.default]).controller("column", ["taskStateService", "ToDoListStorage", _columnCtrl2.default]).controller("taskCtrl", ["taskStateService", "ToDoListStorage", "DataBaseService", _taskCtrl2.default]).directive("loginPage", function () {
     return {
         restrict: "AE",
         template: __webpack_require__(13),

@@ -22,7 +22,7 @@ let todoApp = angular.module("ToDoApp", ["ui.router"])
     .controller("todoListCtrl", ["ToDoListStorage", "DataBaseService", TodoListCtrl])
     .controller("loginPageCtrl", ["$http", "$location", "ToDoListStorage", "DataBaseService", LoginPageCtrl])
     .controller("column", ["taskStateService", "ToDoListStorage", ColumnCtrl])
-    .controller("taskCtrl", ["taskStateService", "ToDoListStorage", TaskCtrl])
+    .controller("taskCtrl", ["taskStateService", "ToDoListStorage", "DataBaseService", TaskCtrl])
 
     .directive("loginPage", function () {
         return {
