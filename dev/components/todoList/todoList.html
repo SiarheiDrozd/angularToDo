@@ -16,20 +16,20 @@
         <input id="taskName"
                type="text"
                class="new-task-input"
-               ng-model="todoList.storage.newTask.name">
+               ng-model="todoList.newTask.name">
 
         <label for="taskDescription">Task Description: </label>
         <input id="taskDescription"
                type="text"
                class="new-task-input"
-               ng-model="todoList.storage.newTask.description">
+               ng-model="todoList.newTask.description">
         <button class="button">ADD</button>
     </form>
     <button ng-click="todoList.getData()" class="button">LOAD</button>
     <button ng-click="todoList.setData()" class="button">SAVE</button>
 
     <ul class="columns">
-        <li ng-repeat="column in todoList.storage.columns track by $index"
+        <li ng-repeat="column in todoList.columns track by $index"
             ng-init="columnIndex = $index"
             column>
         </li>

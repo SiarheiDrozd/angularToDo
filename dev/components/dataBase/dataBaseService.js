@@ -1,10 +1,4 @@
 export default function DataBaseService( $http ) {
-    this.connected = false;
-
-    this.isConnected = function () {
-        return this.connected;
-    };
-
     this.connect = function ( user ) {
         return $http.post( "/dbConnect", user )
             .catch(function (err) {

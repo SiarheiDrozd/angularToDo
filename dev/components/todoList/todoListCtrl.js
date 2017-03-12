@@ -1,41 +1,23 @@
 require("./todoList.css");
 require("../newTaskForm/newTaskForm.css");
 
-export default function TodoListCtrl(ToDoListStorage, DataBaseService ) {
-    this.storage = ToDoListStorage;
-    this.movingTask = {};
-    this.initTask = {stage:0, name: "", description: ""};
-    this.newTask = angular.copy(this.initTask);
-    this.user = ToDoListStorage.user;
-    this.isLogged = this.storage.isLogged;
+export default function TodoListCtrl(ToDoListService, DataBaseService) {
+    this.toDoListService = ToDoListService;
+    this.dbService = DataBaseService;
+
+    this.newTask = this.toDoListService.newTask;
+    this.columns = this.toDoListService.columns;
+    this.user = this.toDoListService.user;
+    this.isLogged = this.toDoListService.isLogged;
 
     this.getData = function () {
-        let storage = this.storage;
-        let user = this.storage.user;
-        DataBaseService.getData(user)
-            .then(function (result) {
-                storage.data = Object.assign(storage.data, result.data );
-                storage.updateLocalStorage();
-            }).catch(function (err) {
-                console.log("data request error", err)
-            });
+        this.toDoListService.getData(this.dbService);
     };
     this.setData = function () {
-        let dataToSet = {data: this.storage.data, user: this.user};
-        DataBaseService.setData(dataToSet)
-            .then(function (result) {
-                console.log(result);
-            })
+        this.toDoListService.setData(this.dbService);
+    };
+    this.addNewTask = function () {
+        this.toDoListService.addNewTask();
     };
 }
-
-TodoListCtrl.prototype.addNewTask = function () {
-    if(this.storage.newTask.name && this.storage.newTask.description){
-        this.storage.data.push(Object.assign({
-                stage: 0
-            }, this.storage.newTask));
-        this.storage.updateLocalStorage();
-        this.storage.newTask = angular.copy(this.initTask);
-    }
-};
 
