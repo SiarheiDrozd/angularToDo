@@ -5200,10 +5200,11 @@ function TaskCtrl(taskService, ToDoListService, DataBaseService) {
     this.moveLeft = function (task) {
         this.taskService.moveLeft(task, this.storage);
     };
+
     this.moveRight = function (task) {
         this.taskService.moveRight(task, this.storage);
     };
-    this.delete = function (task) {
+    this.remove = function (task) {
         this.taskService.delete(task, this.storage, this.dbService);
     };
 }
@@ -5234,6 +5235,7 @@ TaskStateService.prototype.moveRight = function (task, storage) {
     }
 };
 TaskStateService.prototype.delete = function (task, storage, dbService) {
+    console.log(task, storage, dbService);
     var dataForDelete = { task: task, user: storage.user };
     dbService.deleteData(dataForDelete).then(function (result) {
         storage.data.splice(storage.data.indexOf(task), 1);
@@ -5351,13 +5353,13 @@ module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\" ng-click=\"task.asd(currentTask)\">X</button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == todoList.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.name}}</span>\r\n            <a href=\"#!/login\" class=\"button logout-button\" ng-show=\"todoList.isLogged\">log out</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n    <button ng-click=\"todoList.getData()\" class=\"button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.isLogged\">Logged as {{todoList.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.isLogged\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
 /* 15 */
@@ -5396,7 +5398,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".task {\r\n    font-size: 16px;\r\n    width: 100%;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task .button {\r\n    width: 50%;\r\n    margin-top: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n    color: #000;\r\n}", ""]);
+exports.push([module.i, ".task {\r\n    position: relative;\r\n    font-size: 16px;\r\n    width: 100%;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n\r\n.task .button {\r\n    width: 50%;\r\n    margin-top: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n    color: #000;\r\n}\r\n.task .delete-button {\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    width: 25px;\r\n    height: 25px;\r\n    margin-top: 0;\r\n    font-size: 20px;\r\n    line-height: 20px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -5410,7 +5412,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n    width: 100%;\r\n    min-height: 100vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    background-color: #A9EFD4;\r\n}\r\n.todo-list-heading {\r\n    width: 100%;\r\n    height: 40px;\r\n    background-color: #629884;\r\n}\r\n.todo-list-heading .button {\r\n    padding: 0 10px;\r\n    height: 100%;\r\n    line-height: 40px;\r\n}\r\n.logout-button {\r\n    height: auto;\r\n}\r\n.new-task-button {\r\n    width: 150px;\r\n    font-size: 20px;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n\r\n.login-block {\r\n    height: 100%;\r\n    align-self: flex-end;\r\n}\r\n.logout-button {\r\n    display: block;\r\n}", ""]);
+exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n    width: 100%;\r\n    min-height: 100vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    background-color: #A9EFD4;\r\n}\r\n.todo-list-heading {\r\n    width: 100%;\r\n    height: 40px;\r\n    background-color: #629884;\r\n}\r\n.todo-list-heading .button {\r\n    padding: 0 10px;\r\n    height: 100%;\r\n    line-height: 40px;\r\n}\r\n.logout-button {\r\n    height: auto;\r\n}\r\n.new-task-button {\r\n    width: 150px;\r\n    font-size: 20px;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n\r\n.login-block {\r\n    height: 100%;\r\n    align-self: flex-end;\r\n}\r\n.logout-button {\r\n    display: block;\r\n}\r\n.load-button, .save-button {\r\n    width: 100px;\r\n}\r\n", ""]);
 
 // exports
 

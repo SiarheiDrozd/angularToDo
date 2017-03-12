@@ -1,5 +1,7 @@
 <div class="task clearfix">
-    <button class="button delete-button" ng-click="task.delete(currentTask)">X</button>
+    <button class="button delete-button"
+            ng-click="task.remove(currentTask)"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
+    </button>
     <span>{{currentTask.name}}</span>
     <span>{{currentTask.description}}</span>
     <button class="button float-left"
@@ -7,13 +9,11 @@
             ng-hide="{{currentTask.stage == 0}}">
         {{todoList.storage.columns[currentTask.stage - 1]}}
         <i class="fa fa-arrow-left" aria-hidden="true"></i>
-
     </button>
     <button class="button float-right"
             ng-click="task.moveRight(currentTask)"
-            ng-hide="{{currentTask.stage == todoList.storage.columns.length - 1}}">
+            ng-hide="{{currentTask.stage == task.storage.columns.length - 1}}">
         <i class="fa fa-arrow-right" aria-hidden="true"></i>
-
         {{todoList.storage.columns[currentTask.stage + 1]}}
     </button>
 </div>

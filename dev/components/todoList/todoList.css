@@ -41,3 +41,6 @@
 .logout-button {
     display: block;
 }
+.load-button, .save-button {
+    width: 100px;
+}

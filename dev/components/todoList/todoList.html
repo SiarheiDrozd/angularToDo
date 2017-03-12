@@ -8,7 +8,9 @@
         <div class="login-block float-right">
             <a href="#!/login" class="button" ng-hide="todoList.isLogged">LOGIN / REGISTER</a>
             <span ng-show="todoList.isLogged">Logged as {{todoList.user.name}}</span>
-            <a href="#!/login" class="button logout-button" ng-show="todoList.isLogged">log out</a>
+            <a href="#!/login"
+               class="button logout-button float-right"
+               ng-show="todoList.isLogged">LOG OUT</a>
         </div>
     </div>
     <form class="new-task-form" ng-submit="todoList.addNewTask()" ng-show="showNewTaskForm">
@@ -25,8 +27,9 @@
                ng-model="todoList.newTask.description">
         <button class="button">ADD</button>
     </form>
-    <button ng-click="todoList.getData()" class="button">LOAD</button>
-    <button ng-click="todoList.setData()" class="button">SAVE</button>
+
+    <button ng-click="todoList.getData()" class="button load-button">LOAD</button>
+    <button ng-click="todoList.setData()" class="button save-button">SAVE</button>
 
     <ul class="columns">
         <li ng-repeat="column in todoList.columns track by $index"

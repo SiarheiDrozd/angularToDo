@@ -8,10 +8,11 @@ export default function TaskCtrl(taskService, ToDoListService, DataBaseService) 
     this.moveLeft = function (task) {
         this.taskService.moveLeft(task, this.storage);
     };
+
     this.moveRight = function (task) {
         this.taskService.moveRight(task, this.storage);
     };
-    this.delete = function (task) {
+    this.remove = function (task) {
         this.taskService.delete(task, this.storage, this.dbService);
     };
 }
