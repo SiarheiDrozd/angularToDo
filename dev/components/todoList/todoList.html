@@ -6,11 +6,12 @@
             <i class="fa fa-minus-square-o" aria-hidden="true" ng-show="showNewTaskForm"></i> NEW TASK
         </button>
         <div class="login-block float-right">
-            <a href="#!/login" class="button" ng-hide="todoList.isLogged">LOGIN / REGISTER</a>
-            <span ng-show="todoList.isLogged">Logged as {{todoList.user.name}}</span>
+            <a href="#!/login" class="button" ng-hide="todoList.toDoListService.isLogged">LOGIN / REGISTER</a>
+            <span ng-show="todoList.toDoListService.isLogged">Logged as {{todoList.toDoListService.user.name}}</span>
             <a href="#!/login"
                class="button logout-button float-right"
-               ng-show="todoList.isLogged">LOG OUT</a>
+               ng-show="todoList.toDoListService.isLogged"
+               ng-click="todoList.logOut()">LOG OUT</a>
         </div>
     </div>
     <form class="new-task-form" ng-submit="todoList.addNewTask()" ng-show="showNewTaskForm">
@@ -18,13 +19,13 @@
         <input id="taskName"
                type="text"
                class="new-task-input"
-               ng-model="todoList.newTask.name">
+               ng-model="todoList.toDoListService.newTask.name">
 
         <label for="taskDescription">Task Description: </label>
         <input id="taskDescription"
                type="text"
                class="new-task-input"
-               ng-model="todoList.newTask.description">
+               ng-model="todoList.toDoListService.newTask.description">
         <button class="button">ADD</button>
     </form>
 
@@ -37,4 +38,5 @@
             column>
         </li>
     </ul>
+    <div ng-init="todoList.initLoad()"></div>
 </div>

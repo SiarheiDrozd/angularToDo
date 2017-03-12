@@ -11,6 +11,11 @@ LoginPageService.prototype.logIn = function (user, storage, dbService, location)
                 if (result.data) {
                     storage.isLogged = true;
                     storage.data = [];
+
+                    if (typeof(Storage) !== "undefined") {
+                        localStorage.setItem("user", JSON.stringify(user));
+                    }
+
                     location.path("/home");
                 } else {
                     alert("wrong username or password");
@@ -24,7 +29,13 @@ LoginPageService.prototype.registration = function (user, checkPassword, storage
         if (user.password === checkPassword) {
             dbService.register(user)
                 .then(function (result) {
-                    console.log(result);
+                    storage.isLogged = true;
+                    storage.data = [];
+
+                    if (typeof(Storage) !== "undefined") {
+                        localStorage.setItem("user", JSON.stringify(user));
+                    }
+
                     location.path("/home");
                 });
         } else {

@@ -21,10 +21,10 @@
         request.on('data', function ( data ) {
             let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            console.log("newUser ", newUser);
+            // console.log("newUser ", newUser);
             Users.findOne({"name": newUser.name}, function ( err, user ) {
                 if(err){console.log(err)}
-                console.log("connect", user);
+                // console.log("connect", user);
                 if(user){
                     response.send(true);
                 } else {
@@ -38,18 +38,18 @@
         request.on('data', function ( data ) {
             let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            console.log("register", newUser);
+            // console.log("register", newUser);
 
             Users.create({"name": newUser.name, "password": newUser.password}, function ( err, user ) {
                 if(err){console.log("error ",err)}
-                console.log("register", user);
+                // console.log("register", user);
                 response.send(`${user.name} created`);
             });
         });
     });
 
     app.get('/data/:user', function ( request, result ) {
-        console.log("get tasks", request.params);
+        // console.log("get tasks", request.params);
 
         Task = db.model(`${request.params.user}_tasks`, taskSchema);
         Task.find({}, function ( err, data ) {
@@ -64,7 +64,7 @@
     app.post("/data", function ( request, response ) {
         request.on('data', function ( data ) {
             let newData = JSON.parse(data);
-            console.log("set tasks ",newData, data);
+            // console.log("set tasks ",newData, data);
 
             Task = db.model(`${newData.user.name}_tasks`, taskSchema);
             newData.data.forEach((task)=>{
@@ -89,7 +89,7 @@
     });
 
     app.delete("/data/:user/:id", function ( request, response ) {
-        console.log("delete");
+        // console.log("delete");
         Task = db.model(`${request.params.user}_tasks`, taskSchema);
         Task
             .find({_id: request.params.id})

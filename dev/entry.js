@@ -4,7 +4,7 @@ import TaskCtrl from "./components/task/taskCtrl";
 import LoginPageCtrl from "./components/Login/LoginPageCtrl";
 
 import ToDoListService from "./components/todoList/toDoListService";
-import TaskStateService from "./components/task/taskService";
+import TaskService from "./components/task/taskService";
 import DataBaseService from "./components/dataBase/dataBaseService";
 import LoginPageService from "./components/login/loginPageService";
 
@@ -15,15 +15,15 @@ require("angular-ui-router");
 let todoApp = angular.module("ToDoApp", ["ui.router"])
     .config(routing)
 
-    .service("taskStateService", TaskStateService)
+    .service("TaskService", TaskService)
     .service("ToDoListService", ToDoListService)
     .service("DataBaseService", ["$http", DataBaseService])
     .service("LoginPageService", LoginPageService)
 
-    .controller("todoListCtrl", ["ToDoListService", "DataBaseService", TodoListCtrl])
+    .controller("todoListCtrl", ["$scope", "ToDoListService", "DataBaseService", TodoListCtrl])
     .controller("loginPageCtrl", ["$http", "$location", "ToDoListService", "DataBaseService", "LoginPageService", LoginPageCtrl])
     .controller("column", ["ToDoListService", ColumnCtrl])
-    .controller("taskCtrl", ["taskStateService", "ToDoListService", "DataBaseService", TaskCtrl])
+    .controller("taskCtrl", ["TaskService", "ToDoListService", "DataBaseService", TaskCtrl])
 
     .directive("loginPage", function () {
         return {
