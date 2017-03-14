@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -5104,7 +5104,7 @@ function LoginPageCtrl($http, $location, ToDoListService, dbService, loginPageSe
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(19);
+__webpack_require__(20);
 
 function Column(ToDoListService) {
     this.storage = ToDoListService;
@@ -5167,6 +5167,64 @@ function DataBaseService($http) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = LoginPageService;
+function LoginPageService() {}
+
+LoginPageService.prototype.logIn = function (user, storage, dbService, location) {
+    if (user.name && user.password) {
+        storage.user = user;
+
+        if (typeof Storage !== "undefined") {
+            if (JSON.parse(localStorage.getItem("user")) !== user) {
+                localStorage.removeItem("user");
+                localStorage.removeItem("tasks");
+            }
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+
+        dbService.connect(user).then(function (result) {
+            if (result.data) {
+                storage.isLogged = true;
+                storage.data = [];
+                location.path("/home");
+            } else {
+                alert("wrong username or password");
+            }
+        });
+    }
+};
+
+LoginPageService.prototype.registration = function (user, checkPassword, storage, dbService, location) {
+    if (user.name && user.password) {
+        if (user.password === checkPassword) {
+            dbService.register(user).then(function (result) {
+                storage.isLogged = true;
+                storage.data = [];
+
+                if (typeof Storage !== "undefined") {
+                    localStorage.setItem("user", JSON.stringify(user));
+                }
+
+                location.path("/home");
+            });
+        } else {
+            throw Error("passwords not match");
+        }
+    } else {
+        throw Error("parameters invalid");
+    }
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 exports.default = function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/todo-list");
@@ -5180,7 +5238,7 @@ exports.default = function ($stateProvider, $urlRouterProvider) {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5190,7 +5248,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TaskCtrl;
-__webpack_require__(21);
+__webpack_require__(22);
 
 function TaskCtrl(taskService, ToDoListService, DataBaseService) {
     this.storage = ToDoListService;
@@ -5210,7 +5268,7 @@ function TaskCtrl(taskService, ToDoListService, DataBaseService) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5245,7 +5303,7 @@ TaskStateService.prototype.delete = function (task, storage, dbService) {
 exports.default = TaskStateService;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5326,7 +5384,7 @@ ToDoListService.prototype.addNewTask = function () {
 exports.default = ToDoListService;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5336,8 +5394,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = TodoListCtrl;
-__webpack_require__(22);
-__webpack_require__(20);
+__webpack_require__(23);
+__webpack_require__(21);
 
 function TodoListCtrl($scope, ToDoListService, DataBaseService) {
     this.toDoListService = ToDoListService;
@@ -5365,31 +5423,31 @@ function TodoListCtrl($scope, ToDoListService, DataBaseService) {
 }
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <li class=\"task\" ng-show=\"currentColumn.storage.newTask.stage === columnIndex\">\r\n            <span>{{currentColumn.storage.newTask.name}}</span>\r\n            <span>{{currentColumn.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in currentColumn.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.name\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>\r\n";
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span class=\"login-name\" ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5403,7 +5461,7 @@ exports.push([module.i, ".columns {\r\n    list-style: none;\r\n    font-size: 0
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5417,7 +5475,7 @@ exports.push([module.i, ".new-task-form {\r\n    position: absolute;\r\n    top:
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5431,7 +5489,7 @@ exports.push([module.i, ".task {\r\n    position: relative;\r\n    font-size: 16
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -5439,36 +5497,10 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n    width: 100%;\r\n    min-height: 100vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    background-color: #A9EFD4;\r\n}\r\n.todo-list-heading {\r\n    width: 100%;\r\n    height: 40px;\r\n    background-color: #629884;\r\n}\r\n.todo-list-heading .button {\r\n    padding: 0 10px;\r\n    height: 100%;\r\n    line-height: 40px;\r\n}\r\n.logout-button {\r\n    height: auto;\r\n}\r\n.new-task-button {\r\n    width: 150px;\r\n    font-size: 20px;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n\r\n.login-block {\r\n    height: 100%;\r\n    align-self: flex-end;\r\n}\r\n.logout-button {\r\n    display: block;\r\n}\r\n.load-button, .save-button {\r\n    width: 100px;\r\n}\r\n", ""]);
+exports.push([module.i, ".todo-list {\r\n    position: relative;\r\n    width: 100%;\r\n    min-height: 100vh;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    align-items: center;\r\n    background-color: #A9EFD4;\r\n}\r\n.todo-list-heading {\r\n    width: 100%;\r\n    height: 40px;\r\n    background-color: #629884;\r\n}\r\n.todo-list-heading .button {\r\n    padding: 0 10px;\r\n    height: 100%;\r\n    line-height: 40px;\r\n}\r\n.logout-button {\r\n    height: auto;\r\n}\r\n.new-task-button {\r\n    width: 150px;\r\n    font-size: 20px;\r\n}\r\n\r\n.new-task-input {\r\n    width: 100%;\r\n}\r\n\r\n.new-task-label {\r\n    width: 100%;\r\n}\r\n\r\n.login-block {\r\n    height: 100%;\r\n    align-self: flex-end;\r\n}\r\n.logout-button {\r\n    display: block;\r\n}\r\n.login-name {\r\n    line-height: 40px;\r\n    padding-right: 10px;\r\n}\r\n.load-button, .save-button {\r\n    width: 100px;\r\n}\r\n", ""]);
 
 // exports
 
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(15);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./columns.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./columns.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ }),
 /* 20 */
@@ -5486,8 +5518,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./newTaskForm.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./newTaskForm.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./columns.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./columns.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -5512,8 +5544,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./task.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./task.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./newTaskForm.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./newTaskForm.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -5538,8 +5570,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./todoList.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./todoList.css");
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./task.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./task.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -5552,84 +5584,27 @@ if(false) {
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _todoListCtrl = __webpack_require__(10);
-
-var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
-
-var _columnCtrl = __webpack_require__(4);
-
-var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
-
-var _taskCtrl = __webpack_require__(7);
-
-var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
-
-var _LoginPageCtrl = __webpack_require__(3);
-
-var _LoginPageCtrl2 = _interopRequireDefault(_LoginPageCtrl);
-
-var _toDoListService = __webpack_require__(9);
-
-var _toDoListService2 = _interopRequireDefault(_toDoListService);
-
-var _taskService = __webpack_require__(8);
-
-var _taskService2 = _interopRequireDefault(_taskService);
-
-var _dataBaseService = __webpack_require__(5);
-
-var _dataBaseService2 = _interopRequireDefault(_dataBaseService);
-
-var _loginPageService = __webpack_require__(24);
-
-var _loginPageService2 = _interopRequireDefault(_loginPageService);
-
-var _routing = __webpack_require__(6);
-
-var _routing2 = _interopRequireDefault(_routing);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-__webpack_require__(2);
-
-var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default).service("TaskService", _taskService2.default).service("ToDoListService", _toDoListService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).service("LoginPageService", _loginPageService2.default).controller("todoListCtrl", ["$scope", "ToDoListService", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListService", "DataBaseService", "LoginPageService", _LoginPageCtrl2.default]).controller("column", ["ToDoListService", _columnCtrl2.default]).controller("taskCtrl", ["TaskService", "ToDoListService", "DataBaseService", _taskCtrl2.default]).directive("loginPage", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(12),
-        controller: "loginPageCtrl",
-        controllerAs: "loginPage"
-    };
-}).directive("todoList", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(14),
-        controller: "todoListCtrl",
-        controllerAs: "todoList"
-    };
-}).directive("column", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(11),
-        controller: "column",
-        controllerAs: "currentColumn"
-    };
-}).directive("task", function () {
-    return {
-        restrict: "AE",
-        template: __webpack_require__(13),
-        controller: "taskCtrl",
-        controllerAs: "task"
-    };
-});
-
-exports.default = todoApp;
+// load the styles
+var content = __webpack_require__(19);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./todoList.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./todoList.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 /* 24 */
@@ -5641,50 +5616,78 @@ exports.default = todoApp;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = LoginPageService;
-function LoginPageService() {}
 
-LoginPageService.prototype.logIn = function (user, storage, dbService, location) {
-    if (user.name && user.password) {
-        storage.user = user;
+var _todoListCtrl = __webpack_require__(11);
 
-        dbService.connect(user).then(function (result) {
-            if (result.data) {
-                storage.isLogged = true;
-                storage.data = [];
+var _todoListCtrl2 = _interopRequireDefault(_todoListCtrl);
 
-                if (typeof Storage !== "undefined") {
-                    localStorage.setItem("user", JSON.stringify(user));
-                }
+var _columnCtrl = __webpack_require__(4);
 
-                location.path("/home");
-            } else {
-                alert("wrong username or password");
-            }
-        });
-    }
-};
+var _columnCtrl2 = _interopRequireDefault(_columnCtrl);
 
-LoginPageService.prototype.registration = function (user, checkPassword, storage, dbService, location) {
-    if (user.name && user.password) {
-        if (user.password === checkPassword) {
-            dbService.register(user).then(function (result) {
-                storage.isLogged = true;
-                storage.data = [];
+var _taskCtrl = __webpack_require__(8);
 
-                if (typeof Storage !== "undefined") {
-                    localStorage.setItem("user", JSON.stringify(user));
-                }
+var _taskCtrl2 = _interopRequireDefault(_taskCtrl);
 
-                location.path("/home");
-            });
-        } else {
-            throw Error("passwords not match");
-        }
-    } else {
-        throw Error("parameters invalid");
-    }
-};
+var _LoginPageCtrl = __webpack_require__(3);
+
+var _LoginPageCtrl2 = _interopRequireDefault(_LoginPageCtrl);
+
+var _toDoListService = __webpack_require__(10);
+
+var _toDoListService2 = _interopRequireDefault(_toDoListService);
+
+var _taskService = __webpack_require__(9);
+
+var _taskService2 = _interopRequireDefault(_taskService);
+
+var _dataBaseService = __webpack_require__(5);
+
+var _dataBaseService2 = _interopRequireDefault(_dataBaseService);
+
+var _loginPageService = __webpack_require__(6);
+
+var _loginPageService2 = _interopRequireDefault(_loginPageService);
+
+var _routing = __webpack_require__(7);
+
+var _routing2 = _interopRequireDefault(_routing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+__webpack_require__(2);
+
+var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default).service("TaskService", _taskService2.default).service("ToDoListService", _toDoListService2.default).service("DataBaseService", ["$http", _dataBaseService2.default]).service("LoginPageService", _loginPageService2.default).controller("todoListCtrl", ["$scope", "ToDoListService", "DataBaseService", _todoListCtrl2.default]).controller("loginPageCtrl", ["$http", "$location", "ToDoListService", "DataBaseService", "LoginPageService", _LoginPageCtrl2.default]).controller("column", ["ToDoListService", _columnCtrl2.default]).controller("taskCtrl", ["TaskService", "ToDoListService", "DataBaseService", _taskCtrl2.default]).directive("loginPage", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(13),
+        controller: "loginPageCtrl",
+        controllerAs: "loginPage"
+    };
+}).directive("todoList", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(15),
+        controller: "todoListCtrl",
+        controllerAs: "todoList"
+    };
+}).directive("column", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(12),
+        controller: "column",
+        controllerAs: "currentColumn"
+    };
+}).directive("task", function () {
+    return {
+        restrict: "AE",
+        template: __webpack_require__(14),
+        controller: "taskCtrl",
+        controllerAs: "task"
+    };
+});
+
+exports.default = todoApp;
 
 /***/ })
 /******/ ]);

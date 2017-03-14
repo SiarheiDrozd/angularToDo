@@ -6,16 +6,19 @@ LoginPageService.prototype.logIn = function (user, storage, dbService, location)
     if (user.name && user.password) {
         storage.user = user;
 
+        if (typeof(Storage) !== "undefined") {
+            if(JSON.parse(localStorage.getItem("user")) !== user){
+                localStorage.removeItem("user");
+                localStorage.removeItem("tasks");
+            }
+            localStorage.setItem("user", JSON.stringify(user));
+        }
+
         dbService.connect(user)
             .then(function (result) {
                 if (result.data) {
                     storage.isLogged = true;
                     storage.data = [];
-
-                    if (typeof(Storage) !== "undefined") {
-                        localStorage.setItem("user", JSON.stringify(user));
-                    }
-
                     location.path("/home");
                 } else {
                     alert("wrong username or password");

@@ -41,6 +41,10 @@
 .logout-button {
     display: block;
 }
+.login-name {
+    line-height: 40px;
+    padding-right: 10px;
+}
 .load-button, .save-button {
     width: 100px;
 }

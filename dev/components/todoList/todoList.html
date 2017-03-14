@@ -7,7 +7,7 @@
         </button>
         <div class="login-block float-right">
             <a href="#!/login" class="button" ng-hide="todoList.toDoListService.isLogged">LOGIN / REGISTER</a>
-            <span ng-show="todoList.toDoListService.isLogged">Logged as {{todoList.toDoListService.user.name}}</span>
+            <span class="login-name" ng-show="todoList.toDoListService.isLogged">Logged as {{todoList.toDoListService.user.name}}</span>
             <a href="#!/login"
                class="button logout-button float-right"
                ng-show="todoList.toDoListService.isLogged"
