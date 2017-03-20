@@ -14,7 +14,7 @@
         "name": String,
         "password": String
     });
-
+    app.set('port', (process.env.PORT || 5000));
     app.use(express.static(__dirname + "/docs/"));
 
     app.post("/dbConnect", function ( request, response ) {
@@ -111,8 +111,11 @@
         })
     })();
 
-    app.listen(3000, function () {
-        console.log("listening on 127.0.0.1:3000");
+    app.listen(app.get('port'), function() {
+        console.log('Node app is running on port', app.get('port'));
     });
+    // app.listen(3000, function () {
+    //     console.log("listening on 127.0.0.1:3000");
+    // });
 
 })();
