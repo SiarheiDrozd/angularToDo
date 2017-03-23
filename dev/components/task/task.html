@@ -4,6 +4,7 @@
     </button>
     <span>{{currentTask.name}}</span>
     <span>{{currentTask.description}}</span>
+    <span>{{currentTask.expiryDate | date}}</span>
     <button class="button float-left"
             ng-click="task.moveLeft(currentTask)"
             ng-hide="{{currentTask.stage == 0}}">

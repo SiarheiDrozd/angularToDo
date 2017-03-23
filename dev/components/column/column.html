@@ -4,6 +4,7 @@
         <li class="task" ng-show="currentColumn.storage.newTask.stage === columnIndex">
             <span>{{currentColumn.storage.newTask.name}}</span>
             <span>{{currentColumn.storage.newTask.description}}</span>
+            <span>{{currentColumn.storage.newTask.expiryDate | date}}</span>
         </li>
         <li ng-repeat="currentTask in currentColumn.storage.data | filter:{stage: columnIndex}"
             task>

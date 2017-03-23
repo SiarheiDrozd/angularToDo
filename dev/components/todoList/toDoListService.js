@@ -7,7 +7,7 @@ function ToDoListService () {
     ];
     this.data = [];
 
-    this.initTask = { stage: 0, name: "", description: "" };
+    this.initTask = { stage: 0, name: "", description: "", expiryDate: "" };
     this.newTask = angular.copy(this.initTask);
 
     this.user = null;
@@ -67,7 +67,7 @@ ToDoListService.prototype.setData = function (dbService) {
         })
 };
 ToDoListService.prototype.addNewTask = function () {
-    if (this.newTask.name && this.newTask.description) {
+    if (this.newTask.name && this.newTask.description && this.newTask.expiryDate) {
         this.data.push(Object.assign({}, this.newTask));
         this.updateLocalStorage();
         this.newTask = angular.copy(this.initTask);

@@ -5293,7 +5293,7 @@ TaskStateService.prototype.moveRight = function (task, storage) {
     }
 };
 TaskStateService.prototype.delete = function (task, storage, dbService) {
-    console.log(task, storage, dbService);
+    // console.log(task, storage, dbService);
     var dataForDelete = { task: task, user: storage.user };
     dbService.deleteData(dataForDelete).then(function (result) {
         storage.data.splice(storage.data.indexOf(task), 1);
@@ -5316,7 +5316,7 @@ function ToDoListService() {
     this.columns = ["TODO", "WIP", "TEST", "DONE"];
     this.data = [];
 
-    this.initTask = { stage: 0, name: "", description: "" };
+    this.initTask = { stage: 0, name: "", description: "", expiryDate: "" };
     this.newTask = angular.copy(this.initTask);
 
     this.user = null;
@@ -5374,7 +5374,7 @@ ToDoListService.prototype.setData = function (dbService) {
     });
 };
 ToDoListService.prototype.addNewTask = function () {
-    if (this.newTask.name && this.newTask.description) {
+    if (this.newTask.name && this.newTask.description && this.newTask.expiryDate) {
         this.data.push(Object.assign({}, this.newTask));
         this.updateLocalStorage();
         this.newTask = angular.copy(this.initTask);
@@ -5426,7 +5426,7 @@ function TodoListCtrl($scope, ToDoListService, DataBaseService) {
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <li class=\"task\" ng-show=\"currentColumn.storage.newTask.stage === columnIndex\">\r\n            <span>{{currentColumn.storage.newTask.name}}</span>\r\n            <span>{{currentColumn.storage.newTask.description}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in currentColumn.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
+module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\r\n        <li class=\"task\" ng-show=\"currentColumn.storage.newTask.stage === columnIndex\">\r\n            <span>{{currentColumn.storage.newTask.name}}</span>\r\n            <span>{{currentColumn.storage.newTask.description}}</span>\r\n            <span>{{currentColumn.storage.newTask.expiryDate | date}}</span>\r\n        </li>\r\n        <li ng-repeat=\"currentTask in currentColumn.storage.data | filter:{stage: columnIndex}\"\r\n            task>\r\n        </li>\r\n    </ul>\r\n</div>\r\n";
 
 /***/ }),
 /* 13 */
@@ -5438,13 +5438,13 @@ module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>{{currentTask.expiryDate | date}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span class=\"login-name\" ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span class=\"login-name\" ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <input id=\"taskDescription\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\">\r\n        <label for=\"taskExpiry\">Task Deadline: </label>\r\n        <input id=\"taskExpiry\"\r\n               type=\"date\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.expiryDate\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */

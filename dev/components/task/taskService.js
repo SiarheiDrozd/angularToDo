@@ -15,7 +15,7 @@ TaskStateService.prototype.moveRight = function (task, storage) {
     }
 };
 TaskStateService.prototype.delete = function (task, storage, dbService) {
-    console.log(task, storage, dbService);
+    // console.log(task, storage, dbService);
     let dataForDelete = { task: task, user: storage.user };
     dbService.deleteData(dataForDelete)
         .then(function (result) {

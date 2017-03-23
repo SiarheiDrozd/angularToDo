@@ -26,6 +26,11 @@
                type="text"
                class="new-task-input"
                ng-model="todoList.toDoListService.newTask.description">
+        <label for="taskExpiry">Task Deadline: </label>
+        <input id="taskExpiry"
+               type="date"
+               class="new-task-input"
+               ng-model="todoList.toDoListService.newTask.expiryDate">
         <button class="button">ADD</button>
     </form>
 

@@ -8,7 +8,8 @@
     var taskSchema = mongoose.Schema({
         "stage": Number,
         "name": String,
-        "description": String
+        "description": String,
+        "expiryDate": String
     });
     var userSchema = mongoose.Schema({
         "name": String,
@@ -21,7 +22,6 @@
         request.on('data', function ( data ) {
             let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            // console.log("newUser ", newUser);
             Users.findOne({"name": newUser.name}, function ( err, user ) {
                 if(err){console.log(err)}
                 // console.log("connect", user);
@@ -38,7 +38,6 @@
         request.on('data', function ( data ) {
             let newUser = JSON.parse(data);
             let Users = db.model(`users`, userSchema);
-            // console.log("register", newUser);
 
             Users.create({"name": newUser.name, "password": newUser.password}, function ( err, user ) {
                 if(err){console.log("error ",err)}
@@ -49,7 +48,6 @@
     });
 
     app.get('/data/:user', function ( request, result ) {
-        // console.log("get tasks", request.params);
 
         Task = db.model(`${request.params.user}_tasks`, taskSchema);
         Task.find({}, function ( err, data ) {
@@ -64,7 +62,6 @@
     app.post("/data", function ( request, response ) {
         request.on('data', function ( data ) {
             let newData = JSON.parse(data);
-            // console.log("set tasks ",newData, data);
 
             Task = db.model(`${newData.user.name}_tasks`, taskSchema);
             newData.data.forEach((task)=>{
@@ -72,13 +69,15 @@
                     Task.create({
                         "stage": task.stage,
                         "name": task.name,
-                        "description": task.description
+                        "description": task.description,
+                        "expiryDate": task.expiryDate
                     })
                 } else {
                     Task.update({ _id: task._id }, { $set: {
                         "stage": task.stage,
                         "name": task.name,
-                        "description": task.description
+                        "description": task.description,
+                        "expiryDate": task.expiryDate
                     }}, function () {
 
                     });
@@ -89,7 +88,6 @@
     });
 
     app.delete("/data/:user/:id", function ( request, response ) {
-        // console.log("delete");
         Task = db.model(`${request.params.user}_tasks`, taskSchema);
         Task
             .find({_id: request.params.id})
@@ -114,8 +112,4 @@
     app.listen(app.get('port'), function() {
         console.log('Node app is running on port', app.get('port'));
     });
-    // app.listen(3000, function () {
-    //     console.log("listening on 127.0.0.1:3000");
-    // });
-
 })();
