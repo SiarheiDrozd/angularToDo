@@ -1,11 +1,10 @@
-<div class="task clearfix"
-    ng-class="task.isExpires(currentTask)">
+<div class="task clearfix">
     <button class="button delete-button"
             ng-click="task.remove(currentTask)"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
     </button>
     <span>{{currentTask.name}}</span>
     <span>{{currentTask.description}}</span>
-    <span>{{currentTask.expiryDate | date}}</span>
+    <span ng-class="task.isExpires(currentTask)">{{currentTask.expiryDate | date}}</span>
     <button class="button float-left"
             ng-click="task.moveLeft(currentTask)"
             ng-hide="{{currentTask.stage == 0}}">

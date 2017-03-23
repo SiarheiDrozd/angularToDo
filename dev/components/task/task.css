@@ -7,10 +7,12 @@
     text-align: center;
 }
 .expires {
-    background: #f04446;
+    border: 5px solid #ff505e;
+    background-color: #ff505e;
 }
 .close-to-expire {
-    background: #f0ea62;
+    border: 5px solid #ffef72;
+    background-color: #ffef72;
 }
 
 .task .button {

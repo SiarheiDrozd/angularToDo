@@ -1,26 +1,36 @@
-<a href="/">back</a>
-<form id="loginForm">
-    <div>
-        <button ng-click="loginPage.isRegister = false">logIN</button>
-        <button ng-click="loginPage.isRegister = true">Register</button>
-    </div>
-<div>
-    <label for="loginInput"></label><input id="loginInput"
-                                           type="text"
-                                           placeholder="Login"
-                                           ng-model="loginPage.user.name">
-    <label for="passwordInput"></label><input id="passwordInput"
-                                              type="password"
-                                              placeholder="Password"
-                                              ng-model="loginPage.user.password">
-    <label for="passwordRepeatInput"></label><input id="passwordRepeatInput"
-                                                type="password"
-                                                placeholder="Repeat password"
-                                                ng-show="loginPage.isRegister"
-                                                ng-model="loginPage.checkPassword">
-    <div>
-        <button ng-hide="loginPage.isRegister" ng-click="loginPage.logIn()">Log In</button>
-        <button ng-show="loginPage.isRegister" ng-click="loginPage.registration()">register</button>
-    </div>
+<div class="float-right">
+    <a href="/" class="back-link">back</a>
+    <form id="loginForm">
+        <div>
+            <button class="button" ng-click="loginPage.isRegister = false">logIN</button>
+            <button class="button" ng-click="loginPage.isRegister = true">Register</button>
+        </div>
+        <div>
+            <label for="loginInput"></label>
+            <input id="loginInput"
+                   class="form-text-input"
+                   type="text"
+                   placeholder="Login"
+                   autofocus
+                   ng-model="loginPage.user.name">
+            <label for="passwordInput"></label>
+            <input id="passwordInput"
+                   class="form-text-input"
+                   type="password"
+                   placeholder="Password"
+                   ng-model="loginPage.user.password">
+            <label for="passwordRepeatInput"></label>
+            <input id="passwordRepeatInput"
+                   class="form-text-input"
+                   type="password"
+                   placeholder="Repeat password"
+                   ng-show="loginPage.isRegister"
+                   ng-model="loginPage.checkPassword">
+            <div>
+                <button class="button" ng-hide="loginPage.isRegister" ng-click="loginPage.logIn()">Log In</button>
+                <button class="button" ng-show="loginPage.isRegister" ng-click="loginPage.registration()">register
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
-</form>

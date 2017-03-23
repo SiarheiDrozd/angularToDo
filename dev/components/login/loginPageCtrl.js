@@ -1,3 +1,5 @@
+require("./LoginPage.css");
+
 export default function LoginPageCtrl($http, $location, ToDoListService, dbService, loginPageService) {
     this.user = {
         name    : "",

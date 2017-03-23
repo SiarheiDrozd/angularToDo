@@ -17,6 +17,7 @@
     <form class="new-task-form" ng-submit="todoList.addNewTask()" ng-show="showNewTaskForm">
         <label for="taskName">Task Name: </label>
         <input id="taskName"
+               autofocus
                type="text"
                class="new-task-input"
                ng-model="todoList.toDoListService.newTask.name">

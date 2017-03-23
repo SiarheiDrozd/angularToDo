@@ -5074,6 +5074,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = LoginPageCtrl;
+__webpack_require__(26);
+
 function LoginPageCtrl($http, $location, ToDoListService, dbService, loginPageService) {
     this.user = {
         name: "",
@@ -5448,19 +5450,19 @@ module.exports = "<div class=\"column\">\r\n    <h2>{{column}}</h2>\r\n    <ul>\
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = "<a href=\"/\">back</a>\r\n<form id=\"loginForm\">\r\n    <div>\r\n        <button ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n        <button ng-click=\"loginPage.isRegister = true\">Register</button>\r\n    </div>\r\n<div>\r\n    <label for=\"loginInput\"></label><input id=\"loginInput\"\r\n                                           type=\"text\"\r\n                                           placeholder=\"Login\"\r\n                                           ng-model=\"loginPage.user.name\">\r\n    <label for=\"passwordInput\"></label><input id=\"passwordInput\"\r\n                                              type=\"password\"\r\n                                              placeholder=\"Password\"\r\n                                              ng-model=\"loginPage.user.password\">\r\n    <label for=\"passwordRepeatInput\"></label><input id=\"passwordRepeatInput\"\r\n                                                type=\"password\"\r\n                                                placeholder=\"Repeat password\"\r\n                                                ng-show=\"loginPage.isRegister\"\r\n                                                ng-model=\"loginPage.checkPassword\">\r\n    <div>\r\n        <button ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n        <button ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register</button>\r\n    </div>\r\n</div>\r\n</form>\r\n";
+module.exports = "<div class=\"float-right\">\r\n    <a href=\"/\" class=\"back-link\">back</a>\r\n    <form id=\"loginForm\">\r\n        <div>\r\n            <button class=\"button\" ng-click=\"loginPage.isRegister = false\">logIN</button>\r\n            <button class=\"button\" ng-click=\"loginPage.isRegister = true\">Register</button>\r\n        </div>\r\n        <div>\r\n            <label for=\"loginInput\"></label>\r\n            <input id=\"loginInput\"\r\n                   class=\"form-text-input\"\r\n                   type=\"text\"\r\n                   placeholder=\"Login\"\r\n                   autofocus\r\n                   ng-model=\"loginPage.user.name\">\r\n            <label for=\"passwordInput\"></label>\r\n            <input id=\"passwordInput\"\r\n                   class=\"form-text-input\"\r\n                   type=\"password\"\r\n                   placeholder=\"Password\"\r\n                   ng-model=\"loginPage.user.password\">\r\n            <label for=\"passwordRepeatInput\"></label>\r\n            <input id=\"passwordRepeatInput\"\r\n                   class=\"form-text-input\"\r\n                   type=\"password\"\r\n                   placeholder=\"Repeat password\"\r\n                   ng-show=\"loginPage.isRegister\"\r\n                   ng-model=\"loginPage.checkPassword\">\r\n            <div>\r\n                <button class=\"button\" ng-hide=\"loginPage.isRegister\" ng-click=\"loginPage.logIn()\">Log In</button>\r\n                <button class=\"button\" ng-show=\"loginPage.isRegister\" ng-click=\"loginPage.registration()\">register\r\n                </button>\r\n            </div>\r\n        </div>\r\n    </form>\r\n</div>\r\n";
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"task clearfix\"\r\n    ng-class=\"task.isExpires(currentTask)\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span>{{currentTask.expiryDate | date}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
+module.exports = "<div class=\"task clearfix\">\r\n    <button class=\"button delete-button\"\r\n            ng-click=\"task.remove(currentTask)\"><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <span>{{currentTask.name}}</span>\r\n    <span>{{currentTask.description}}</span>\r\n    <span ng-class=\"task.isExpires(currentTask)\">{{currentTask.expiryDate | date}}</span>\r\n    <button class=\"button float-left\"\r\n            ng-click=\"task.moveLeft(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == 0}}\">\r\n        {{todoList.storage.columns[currentTask.stage - 1]}}\r\n        <i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>\r\n    </button>\r\n    <button class=\"button float-right\"\r\n            ng-click=\"task.moveRight(currentTask)\"\r\n            ng-hide=\"{{currentTask.stage == task.storage.columns.length - 1}}\">\r\n        <i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>\r\n        {{todoList.storage.columns[currentTask.stage + 1]}}\r\n    </button>\r\n</div>\r\n\r\n";
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span class=\"login-name\" ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <textarea id=\"taskDescription\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\"></textarea>\r\n        <label for=\"taskExpiry\">Task Deadline: </label>\r\n        <input id=\"taskExpiry\"\r\n               type=\"date\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.expiryDate\"\r\n               min=\"{{todoList.currentDate | date: 'yyyy-MM-dd'}}\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
+module.exports = "<div class=\"todo-list\">\r\n\r\n    <div class=\"todo-list-heading clearfix\">\r\n        <button class=\"button new-task-button float-left\" ng-click=\"showNewTaskForm = !showNewTaskForm\">\r\n            <i class=\"fa fa-plus-square-o\" aria-hidden=\"true\" ng-hide=\"showNewTaskForm\"></i>\r\n            <i class=\"fa fa-minus-square-o\" aria-hidden=\"true\" ng-show=\"showNewTaskForm\"></i> NEW TASK\r\n        </button>\r\n        <div class=\"login-block float-right\">\r\n            <a href=\"#!/login\" class=\"button\" ng-hide=\"todoList.toDoListService.isLogged\">LOGIN / REGISTER</a>\r\n            <span class=\"login-name\" ng-show=\"todoList.toDoListService.isLogged\">Logged as {{todoList.toDoListService.user.name}}</span>\r\n            <a href=\"#!/login\"\r\n               class=\"button logout-button float-right\"\r\n               ng-show=\"todoList.toDoListService.isLogged\"\r\n               ng-click=\"todoList.logOut()\">LOG OUT</a>\r\n        </div>\r\n    </div>\r\n    <form class=\"new-task-form\" ng-submit=\"todoList.addNewTask()\" ng-show=\"showNewTaskForm\">\r\n        <label for=\"taskName\">Task Name: </label>\r\n        <input id=\"taskName\"\r\n               autofocus\r\n               type=\"text\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.name\">\r\n\r\n        <label for=\"taskDescription\">Task Description: </label>\r\n        <textarea id=\"taskDescription\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.description\"></textarea>\r\n        <label for=\"taskExpiry\">Task Deadline: </label>\r\n        <input id=\"taskExpiry\"\r\n               type=\"date\"\r\n               class=\"new-task-input\"\r\n               ng-model=\"todoList.toDoListService.newTask.expiryDate\"\r\n               min=\"{{todoList.currentDate | date: 'yyyy-MM-dd'}}\">\r\n        <button class=\"button\">ADD</button>\r\n    </form>\r\n\r\n    <button ng-click=\"todoList.getData()\" class=\"button load-button\">LOAD</button>\r\n    <button ng-click=\"todoList.setData()\" class=\"button save-button\">SAVE</button>\r\n\r\n    <ul class=\"columns\">\r\n        <li ng-repeat=\"column in todoList.columns track by $index\"\r\n            ng-init=\"columnIndex = $index\"\r\n            column>\r\n        </li>\r\n    </ul>\r\n    <div ng-init=\"todoList.initLoad()\"></div>\r\n</div>\r\n";
 
 /***/ }),
 /* 16 */
@@ -5499,7 +5501,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".task {\r\n    position: relative;\r\n    font-size: 16px;\r\n    width: 100%;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n.expires {\r\n    background: #f04446;\r\n}\r\n.close-to-expire {\r\n    background: #f0ea62;\r\n}\r\n\r\n.task .button {\r\n    width: 50%;\r\n    margin-top: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n    color: #000;\r\n    max-width: 100%;\r\n}\r\n.task .delete-button {\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    width: 25px;\r\n    height: 25px;\r\n    margin-top: 0;\r\n    font-size: 20px;\r\n    line-height: 20px;\r\n}\r\n", ""]);
+exports.push([module.i, ".task {\r\n    position: relative;\r\n    font-size: 16px;\r\n    width: 100%;\r\n    margin: 5px 0;\r\n    background: #ffffff;\r\n    text-align: center;\r\n}\r\n.expires {\r\n    border: 5px solid #ff505e;\r\n    background-color: #ff505e;\r\n}\r\n.close-to-expire {\r\n    border: 5px solid #ffef72;\r\n    background-color: #ffef72;\r\n}\r\n\r\n.task .button {\r\n    width: 50%;\r\n    margin-top: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.task span {\r\n    display: block;\r\n    color: #000;\r\n    max-width: 100%;\r\n}\r\n.task .delete-button {\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    width: 25px;\r\n    height: 25px;\r\n    margin-top: 0;\r\n    font-size: 20px;\r\n    line-height: 20px;\r\n}\r\n", ""]);
 
 // exports
 
@@ -5704,6 +5706,46 @@ var todoApp = angular.module("ToDoApp", ["ui.router"]).config(_routing2.default)
 });
 
 exports.default = todoApp;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".button {\r\n    display: inline-block;\r\n    padding: 5px;\r\n    text-transform: uppercase;\r\n}\r\n.form-text-input {\r\n    display: block;\r\n    margin: 5px;\r\n}\r\n.back-link {\r\n    display: inline-block;\r\n    text-transform: uppercase;\r\n    text-decoration: underline;\r\n    color: #000000;\r\n    margin: 10px 0;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(25);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./LoginPage.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./LoginPage.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

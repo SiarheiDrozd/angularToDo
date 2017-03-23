@@ -1,0 +1,16 @@
+.button {
+    display: inline-block;
+    padding: 5px;
+    text-transform: uppercase;
+}
+.form-text-input {
+    display: block;
+    margin: 5px;
+}
+.back-link {
+    display: inline-block;
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: #000000;
+    margin: 10px 0;
+}
