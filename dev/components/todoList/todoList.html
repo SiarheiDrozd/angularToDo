@@ -22,15 +22,15 @@
                ng-model="todoList.toDoListService.newTask.name">
 
         <label for="taskDescription">Task Description: </label>
-        <input id="taskDescription"
-               type="text"
+        <textarea id="taskDescription"
                class="new-task-input"
-               ng-model="todoList.toDoListService.newTask.description">
+               ng-model="todoList.toDoListService.newTask.description"></textarea>
         <label for="taskExpiry">Task Deadline: </label>
         <input id="taskExpiry"
                type="date"
                class="new-task-input"
-               ng-model="todoList.toDoListService.newTask.expiryDate">
+               ng-model="todoList.toDoListService.newTask.expiryDate"
+               min="{{todoList.currentDate | date: 'yyyy-MM-dd'}}">
         <button class="button">ADD</button>
     </form>
 

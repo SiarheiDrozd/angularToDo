@@ -6,6 +6,12 @@
     background: #ffffff;
     text-align: center;
 }
+.expires {
+    background: #f04446;
+}
+.close-to-expire {
+    background: #f0ea62;
+}
 
 .task .button {
     width: 50%;
@@ -16,6 +22,7 @@
 .task span {
     display: block;
     color: #000;
+    max-width: 100%;
 }
 .task .delete-button {
     position: absolute;

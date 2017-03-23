@@ -1,4 +1,5 @@
-<div class="task clearfix">
+<div class="task clearfix"
+    ng-class="task.isExpires(currentTask)">
     <button class="button delete-button"
             ng-click="task.remove(currentTask)"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
     </button>

@@ -5,6 +5,10 @@ export default function TaskCtrl(taskService, ToDoListService, DataBaseService) 
     this.taskService = taskService;
     this.dbService = DataBaseService;
 
+    this.isExpires = function ( task ) {
+        return this.taskService.isExpires(task.expiryDate, new Date());
+    };
+
     this.moveLeft = function (task) {
         this.taskService.moveLeft(task, this.storage);
     };
@@ -12,6 +16,7 @@ export default function TaskCtrl(taskService, ToDoListService, DataBaseService) 
     this.moveRight = function (task) {
         this.taskService.moveRight(task, this.storage);
     };
+
     this.remove = function (task) {
         this.taskService.delete(task, this.storage, this.dbService);
     };

@@ -8,6 +8,8 @@ export default function TodoListCtrl($scope, ToDoListService, DataBaseService) {
     this.columns = this.toDoListService.columns;
     this.isLogged = this.toDoListService.isLogged;
 
+    this.currentDate = new Date();
+
     this.initLoad = function () {
         this.toDoListService.initLoad(this.dbService);
     };
